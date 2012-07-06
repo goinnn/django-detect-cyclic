@@ -121,6 +121,9 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
                             if verbosity:
                                 log.info('\t %s --> %s' % (app_source, app_destination))
                             gr.add_edge((app_source, app_destination))
+                        else:
+                            weight = gr.edge_weight((app_source, app_destination))
+                            gr.set_edge_weight((app_source, app_destination), weight + 1)
                         break
 
 
@@ -140,7 +143,8 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy):
             next_item = cycle[i + 1]
         except IndexError:
             next_item = cycle[0]
-        gr.set_edge_label((item, next_item), "Cycle %s" % number_cycle)
+        weight = gr.edge_weight((item, next_item))
+        gr.set_edge_label((item, next_item), "Cycle %s (%s)" % (number_cycle, weight))
         cycle_color = '#%s' % ((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
         gr.add_edge_attribute((item, next_item), ("color", cycle_color))
         gr_copy.del_edge((item, next_item))
