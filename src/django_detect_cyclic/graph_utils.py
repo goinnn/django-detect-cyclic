@@ -1,3 +1,4 @@
+import logging
 import sys
 try:
     import gv
@@ -13,12 +14,14 @@ from pygraph.readwrite.dot import write
 
 from pyplete import PyPlete
 
-from django.conf import settings
+from django_detect_cyclic.utils import get_applications
 
 CYCLE_COLOR = "#f8c85c"
 
+log = logging.getLogger('django_detect_cyclic.graph_utils.py')
 
-def create_graph_test():
+
+def create_graph_test(*args, **kwargs):
     gr = digraph()
     gr.add_nodes(["Portugal", "Spain", "France", "Germany", "Belgium", "Netherlands", "Italy"])
     gr.add_edge(("Portugal", "Spain"))
@@ -36,27 +39,45 @@ def create_graph_test():
     return gr
 
 
-def create_graph():
+def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False):
     gr = digraph()
-    gr.add_nodes(settings.INSTALLED_APPS)
+    applications = get_applications(include_apps, exclude_apps)
+    gr.add_nodes(applications)
     pyplete = PyPlete()
-    for app_source in settings.INSTALLED_APPS:
-        app_modules = app_source.split(".")
-        importables_to_app = []
-        pyplete.get_importables_rest_level(importables_to_app, app_modules[0], app_modules[1:], into_module=False)
-        for importable_to_app, importable_type  in importables_to_app:
-            if importable_type != 'module':
-                continue
-            code = pyplete.get_imp_loader_from_path(app_modules[0], app_modules[1:] + [importable_to_app])[0].get_source()
-            imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
-            for import_code in imports_code.values():
-                if not import_code.startswith(app_source):
-                    for app_destination in settings.INSTALLED_APPS:
-                        if import_code.startswith(app_destination):
-                            if not gr.has_edge((app_source, app_destination)):
-                                gr.add_edge((app_source, app_destination))
-                            break
+    for app_source in applications:
+        if verbosity:
+            log.info("Analizing %s" % app_source)
+        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, verbosity)
     return gr
+
+
+def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, exclude_packages=None, verbosity=False):
+    pyplete = pyplete or PyPlete()
+    package_modules = package.split(".")
+    importables_to_app = []
+    pyplete.get_importables_rest_level(importables_to_app, package_modules[0], package_modules[1:], into_module=False)
+    for importable_to_app, importable_type  in importables_to_app:
+        if importable_type == 'package':
+            if exclude_packages and importable_to_app in exclude_packages:
+                if verbosity:
+                    log.info('\t Ignore %s' % importable_to_app)
+                continue
+            subpackage = '%s.%s' % (package, importable_to_app)
+            _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
+                                  exclude_packages=exclude_packages, verbosity=verbosity)
+        if importable_type != 'module':
+            continue
+        code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
+        imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
+        for import_code in imports_code.values():
+            if not import_code.startswith(app_source):
+                for app_destination in applications:
+                    if import_code.startswith(app_destination):
+                        if not gr.has_edge((app_source, app_destination)):
+                            if verbosity:
+                                log.info('\t %s --> %s' % (app_source, app_destination))
+                            gr.add_edge((app_source, app_destination))
+                        break
 
 
 def find_all_cycle(gr, gr_copy=None, number_cycle=1):
