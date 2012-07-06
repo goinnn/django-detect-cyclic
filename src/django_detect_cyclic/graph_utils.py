@@ -40,7 +40,8 @@ def create_graph_test(*args, **kwargs):
     return gr
 
 
-def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False, remove_nodes_isolated=False, show_modules=False):
+def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False,
+                 show_modules=False):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
     if not show_modules:
@@ -50,9 +51,33 @@ def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, ve
         if verbosity:
             log.info("Analizing %s" % app_source)
         _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, show_modules, verbosity)
-    if remove_nodes_isolated:
+    return gr
+
+
+def treatment_final_graph(gr, remove_isolated_nodes=False, remove_sink_nodes=False,
+                          remove_source_nodes=False, only_cyclic=False, verbosity=False):
+    if only_cyclic:
+        for edge, properties in gr.edge_properties.items():
+            if not properties['label']:
+                if verbosity:
+                    log.info("Remove the edge %s-->%s" % edge)
+                gr.del_edge(edge)
+    if remove_source_nodes:
         for node, incidence in gr.node_incidence.items():
             if not incidence:
+                if verbosity:
+                    log.info("Remove the node %s" % node)
+                gr.del_node(node)
+    if remove_sink_nodes:
+        for node, neighbor in gr.node_neighbors.items():
+            if not neighbor:
+                if verbosity:
+                    log.info("Remove the node %s" % node)
+                gr.del_node(node)
+    if remove_isolated_nodes:
+        for node, incidence in gr.node_incidence.items():
+            neighbor = gr.node_neighbors.get(node, None)
+            if not incidence and not neighbor:
                 if verbosity:
                     log.info("Remove the node %s" % node)
                 gr.del_node(node)

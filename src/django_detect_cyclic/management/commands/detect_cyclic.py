@@ -1,7 +1,7 @@
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
-from django_detect_cyclic.graph_utils import create_graph, find_all_cycle, print_graph
+from django_detect_cyclic.graph_utils import create_graph, find_all_cycle, print_graph, treatment_final_graph
 
 
 class Command(BaseCommand):
@@ -15,8 +15,14 @@ class Command(BaseCommand):
                     help='Exclude these apps to the graph (separated by commas)'),
             make_option('-p', '--exclude-packages', dest='exclude_packages',
                     help='Exclude the next packages. For example migrations,templatetags (separated by commas)'),
-            make_option('-a', '--remove-nodes_isolated', dest='remove_nodes_isolated',  action="store_true",
-                    help='Remove the nodes isolated'),
+            make_option('-r', '--remove-isolate-nodes', dest='remove_isolate_nodes',  action="store_true",
+                    help='Remove the isolate nodes'),
+            make_option('-k', '--remove-sink-nodes', dest='remove_sink_nodes',  action="store_true",
+                    help='Remove the sink nodes'),
+            make_option('-a', '--remove-source-nodes', dest='remove_source_nodes',  action="store_true",
+                    help='Remove the source nodes'),
+            make_option('-o', '--only-cyclic', dest='only_cyclic',  action="store_true",
+                    help='Remove the nodes without cyclic'),
             make_option('-s', '--show-modules', dest='show_modules',  action="store_true",
                     help='The nodes now are the modules (by default are the applications)'),
     )
@@ -30,8 +36,17 @@ class Command(BaseCommand):
         if options['exclude_packages']:
             exclude_packages = options['exclude_packages'].split(',')
         verbosity = options['verbosity'] == "2"
-        remove_nodes_isolated = options['remove_nodes_isolated']
+        remove_isolate_nodes = options['remove_isolate_nodes']
+        remove_sink_nodes = options['remove_sink_nodes']
+        remove_source_nodes = options['remove_source_nodes']
+        only_cyclic = options['only_cyclic']
+        if only_cyclic:
+            remove_isolate_nodes = True
         show_modules = options['show_modules']
-        gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, remove_nodes_isolated, show_modules)
+        gr = create_graph(include_apps, exclude_apps, exclude_packages,
+                          verbosity,
+                          show_modules)
         find_all_cycle(gr)
+        treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
+                              only_cyclic, verbosity=verbosity)
         print_graph(gr, options['file_name'])
