@@ -24,6 +24,7 @@ log = logging.getLogger('django_detect_cyclic.graph_utils.py')
 def create_graph_test(*args, **kwargs):
     gr = digraph()
     gr.add_nodes(["Portugal", "Spain", "France", "Germany", "Belgium", "Netherlands", "Italy"])
+    gr.add_node_attribute("Spain", ("color", "red"))
     gr.add_edge(("Portugal", "Spain"))
     gr.add_edge(("Spain", "France"))
     gr.add_edge(("France", "Portugal"))
