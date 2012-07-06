@@ -16,7 +16,7 @@ from pyplete import PyPlete
 
 from django_detect_cyclic.utils import get_applications
 
-CYCLE_COLOR = "#f8c85c"
+CYCLE_COLOR_SEED = "f8c85c"
 
 log = logging.getLogger('django_detect_cyclic.graph_utils.py')
 
@@ -39,7 +39,7 @@ def create_graph_test(*args, **kwargs):
     return gr
 
 
-def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False):
+def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False, remove_nodes_isolated=False):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
     gr.add_nodes(applications)
@@ -48,6 +48,12 @@ def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, ve
         if verbosity:
             log.info("Analizing %s" % app_source)
         _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, verbosity)
+    if remove_nodes_isolated:
+        for node, incidence in gr.node_incidence.items():
+            if not incidence:
+                if verbosity:
+                    log.info("Remove the node %s" % node)
+                gr.del_node(node)
     return gr
 
 
@@ -71,7 +77,8 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
         except SyntaxError, e:
-            log.error("\t File: %s SyntaxError %s" % (package_modules + [importable_to_app], e))
+            if verbosity:
+                log.error("\t File: %s SyntaxError %s" % (package_modules + [importable_to_app], e))
             continue
         for import_code in imports_code.values():
             if not import_code.startswith(app_source):
@@ -101,7 +108,8 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy):
         except IndexError:
             next_item = cycle[0]
         gr.set_edge_label((item, next_item), "Cycle %s" % number_cycle)
-        gr.add_edge_attribute((item, next_item), ("color", CYCLE_COLOR))
+        cycle_color = '#%s' % ((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
+        gr.add_edge_attribute((item, next_item), ("color", cycle_color))
         gr_copy.del_edge((item, next_item))
         i += 1
 
