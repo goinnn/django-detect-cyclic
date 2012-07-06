@@ -40,15 +40,16 @@ def create_graph_test(*args, **kwargs):
     return gr
 
 
-def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False, remove_nodes_isolated=False):
+def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False, remove_nodes_isolated=False, show_modules=False):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
-    gr.add_nodes(applications)
+    if not show_modules:
+        gr.add_nodes(applications)
     pyplete = PyPlete()
     for app_source in applications:
         if verbosity:
             log.info("Analizing %s" % app_source)
-        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, verbosity)
+        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, show_modules, verbosity)
     if remove_nodes_isolated:
         for node, incidence in gr.node_incidence.items():
             if not incidence:
@@ -58,7 +59,7 @@ def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, ve
     return gr
 
 
-def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, exclude_packages=None, verbosity=False):
+def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, exclude_packages=None, show_modules=False, verbosity=False):
     pyplete = pyplete or PyPlete()
     package_modules = package.split(".")
     importables_to_app = []
@@ -71,9 +72,14 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
                 continue
             subpackage = '%s.%s' % (package, importable_to_app)
             _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
-                                  exclude_packages=exclude_packages, verbosity=verbosity)
+                                  exclude_packages=exclude_packages,
+                                  show_modules=show_modules,
+                                  verbosity=verbosity)
         if importable_type != 'module':
             continue
+        if show_modules:
+            node = package_modules + [importable_to_app]
+            gr.add_node('.'.join(node))
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']

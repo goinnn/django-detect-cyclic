@@ -17,6 +17,8 @@ class Command(BaseCommand):
                     help='Exclude the next packages. For example migrations,templatetags (separated by commas)'),
             make_option('-a', '--remove-nodes_isolated', dest='remove_nodes_isolated',  action="store_true",
                     help='Remove the nodes isolated'),
+            make_option('-s', '--show-modules', dest='show_modules',  action="store_true",
+                    help='The nodes now are the modules (by default are the applications)'),
     )
 
     def handle(self, *args, **options):
@@ -29,6 +31,7 @@ class Command(BaseCommand):
             exclude_packages = options['exclude_packages'].split(',')
         verbosity = options['verbosity'] == "2"
         remove_nodes_isolated = options['remove_nodes_isolated']
-        gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, remove_nodes_isolated)
+        show_modules = options['show_modules']
+        gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, remove_nodes_isolated, show_modules)
         find_all_cycle(gr)
         print_graph(gr, options['file_name'])
