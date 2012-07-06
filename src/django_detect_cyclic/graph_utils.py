@@ -11,6 +11,10 @@ from pygraph.algorithms.cycles import find_cycle
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
 
+from pyplete import PyPlete
+
+from django.conf import settings
+
 CYCLE_COLOR = "#f8c85c"
 
 
@@ -29,6 +33,29 @@ def create_graph_test():
     gr.add_edge(("Belgium", "Netherlands"))
     gr.add_edge(("Germany", "Belgium"))
     gr.add_edge(("Germany", "Netherlands"))
+    return gr
+
+
+def create_graph():
+    gr = digraph()
+    gr.add_nodes(settings.INSTALLED_APPS)
+    pyplete = PyPlete()
+    for app_source in settings.INSTALLED_APPS:
+        app_modules = app_source.split(".")
+        importables_to_app = []
+        pyplete.get_importables_rest_level(importables_to_app, app_modules[0], app_modules[1:], into_module=False)
+        for importable_to_app, importable_type  in importables_to_app:
+            if importable_type != 'module':
+                continue
+            code = pyplete.get_imp_loader_from_path(app_modules[0], app_modules[1:] + [importable_to_app])[0].get_source()
+            imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
+            for import_code in imports_code.values():
+                if not import_code.startswith(app_source):
+                    for app_destination in settings.INSTALLED_APPS:
+                        if import_code.startswith(app_destination):
+                            if not gr.has_edge((app_source, app_destination)):
+                                gr.add_edge((app_source, app_destination))
+                            break
     return gr
 
 

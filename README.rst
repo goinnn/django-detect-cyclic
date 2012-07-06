@@ -21,6 +21,8 @@ Requeriments
 
  * python-graph-core
  * python-graph-dot
+ * pysmell
+ * `pyplete <https://github.com/goinnn/Kate-plugins/blob/master/kate_plugins/pyte_plugins/autocomplete/pyplete.py/>`_
 
 It is possible that the next links are interested if you can some problem:
 
