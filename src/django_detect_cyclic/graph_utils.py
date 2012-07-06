@@ -68,7 +68,11 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
         if importable_type != 'module':
             continue
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
-        imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
+        try:
+            imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
+        except SyntaxError, e:
+            log.error("\t File: %s SyntaxError %s" % (package_modules + [importable_to_app], e))
+            continue
         for import_code in imports_code.values():
             if not import_code.startswith(app_source):
                 for app_destination in applications:
