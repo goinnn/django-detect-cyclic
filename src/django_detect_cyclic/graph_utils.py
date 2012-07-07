@@ -17,7 +17,7 @@ from pyplete import PyPlete
 from django_detect_cyclic.utils import get_applications
 
 CYCLE_COLOR_SEED = "f8c85c"
-
+CYCLE_LABEL = 'Cycle'
 log = logging.getLogger('django_detect_cyclic.graph_utils.py')
 
 
@@ -61,7 +61,7 @@ def treatment_final_graph(gr, remove_isolated_nodes=False, remove_sink_nodes=Fal
                           remove_source_nodes=False, only_cyclic=False, verbosity=False):
     if only_cyclic:
         for edge, properties in gr.edge_properties.items():
-            if not properties['label']:
+            if not CYCLE_LABEL in properties['label']:
                 if verbosity:
                     log.info("Remove the edge %s-->%s" % edge)
                 gr.del_edge(edge)
@@ -123,9 +123,11 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
                             if verbosity:
                                 log.info('\t %s --> %s' % (app_source, app_destination))
                             gr.add_edge((app_source, app_destination))
+                            gr.set_edge_label((app_source, app_destination), "(1)")
                         else:
                             weight = gr.edge_weight((app_source, app_destination))
                             gr.set_edge_weight((app_source, app_destination), weight + 1)
+                            gr.set_edge_label((app_source, app_destination), "(%s)" % weight)
                         break
 
 
@@ -146,7 +148,7 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy):
         except IndexError:
             next_item = cycle[0]
         weight = gr.edge_weight((item, next_item))
-        gr.set_edge_label((item, next_item), "Cycle %s (%s)" % (number_cycle, weight))
+        gr.set_edge_label((item, next_item), "%s %s (%s)" % (CYCLE_LABEL, number_cycle, weight))
         cycle_color = '#%s' % ((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
         gr.add_edge_attribute((item, next_item), ("color", cycle_color))
         gr_copy.del_edge((item, next_item))
