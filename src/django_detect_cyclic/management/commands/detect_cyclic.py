@@ -1,7 +1,7 @@
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
-from django_detect_cyclic.graph_utils import create_graph, find_all_cycle, print_graph, treatment_final_graph
+from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 
 
 class Command(BaseCommand):
@@ -43,10 +43,7 @@ class Command(BaseCommand):
         if only_cyclic:
             remove_isolate_nodes = True
         show_modules = options['show_modules']
-        gr = create_graph(include_apps, exclude_apps, exclude_packages,
-                          verbosity,
-                          show_modules)
-        find_all_cycle(gr)
-        treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
-                              only_cyclic, verbosity=verbosity)
-        print_graph(gr, options['file_name'])
+        file_name = options['file_name']
+        create_graph_apps_dependence(file_name, include_apps, exclude_apps, exclude_packages,
+                                     verbosity, show_modules, remove_isolate_nodes,
+                                     remove_sink_nodes, remove_source_nodes, only_cyclic)
