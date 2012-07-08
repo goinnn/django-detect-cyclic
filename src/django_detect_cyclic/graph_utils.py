@@ -99,15 +99,17 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
                     log.info('\t Ignore %s' % importable_to_app)
                 continue
             subpackage = '%s.%s' % (package, importable_to_app)
-            _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
-                                  exclude_packages=exclude_packages,
-                                  show_modules=show_modules,
-                                  verbosity=verbosity)
+            if subpackage not in applications:
+                _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
+                                      exclude_packages=exclude_packages,
+                                      show_modules=show_modules,
+                                      verbosity=verbosity)
         if importable_type != 'module':
             continue
         if show_modules:
             node = package_modules + [importable_to_app]
-            gr.add_node('.'.join(node))
+            if not gr.has_node('.'.join(node)):
+                gr.add_node('.'.join(node))
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
@@ -115,20 +117,55 @@ def _add_edges_to_package(gr, package, app_source, applications, pyplete=None, e
             if verbosity:
                 log.error("\t File: %s SyntaxError %s" % (package_modules + [importable_to_app], e))
             continue
-        for import_code in imports_code.values():
-            if not import_code.startswith(app_source):
-                for app_destination in applications:
-                    if import_code.startswith(app_destination):
-                        if not gr.has_edge((app_source, app_destination)):
+        if show_modules:
+            for import_code in imports_code.values():
+                import_module = _get_module_to_import(import_code.split('.'), pyplete=pyplete)
+                import_module_is_into_app = False
+                if import_module:
+                    for app in applications:
+                        if import_module.startswith(app):
+                            import_module_is_into_app = True
+                            break
+                    if import_module_is_into_app:
+                        if not gr.has_node(import_module):
+                            gr.add_node(import_module)
+                        node_source = '.'.join(node)
+                        if not gr.has_edge((node_source, import_module)):
                             if verbosity:
-                                log.info('\t %s --> %s' % (app_source, app_destination))
-                            gr.add_edge((app_source, app_destination))
-                            gr.set_edge_label((app_source, app_destination), "(1)")
+                                log.info('\t %s --> %s' % (node_source, import_module))
+                            gr.add_edge((node_source, import_module))
+                            gr.set_edge_label((node_source, import_module), "(1)")
                         else:
-                            weight = gr.edge_weight((app_source, app_destination))
-                            gr.set_edge_weight((app_source, app_destination), weight + 1)
-                            gr.set_edge_label((app_source, app_destination), "(%s)" % weight)
-                        break
+                            weight = gr.edge_weight((node_source, import_module))
+                            gr.set_edge_weight((node_source, import_module), weight + 1)
+                            gr.set_edge_label((node_source, import_module), "(%s)" % weight)
+
+        else:
+            for import_code in imports_code.values():
+                if not import_code.startswith(app_source):
+                    for app_destination in applications:
+                        if import_code.startswith(app_destination):
+                            if not gr.has_edge((app_source, app_destination)):
+                                if verbosity:
+                                    log.info('\t %s --> %s' % (app_source, app_destination))
+                                gr.add_edge((app_source, app_destination))
+                                gr.set_edge_label((app_source, app_destination), "(1)")
+                            else:
+                                weight = gr.edge_weight((app_source, app_destination))
+                                gr.set_edge_weight((app_source, app_destination), weight + 1)
+                                gr.set_edge_label((app_source, app_destination), "(%s)" % weight)
+                            break
+
+
+def _get_module_to_import(import_code, pyplete=None):
+    if len(import_code) == 0:
+        return None
+    pyplete = pyplete or PyPlete()
+    imports = []
+    pyplete.get_importables_rest_level(imports, import_code[0], import_code[1:])
+    if imports:
+        return '.'.join(import_code)
+    return _get_module_to_import(import_code[:-1], pyplete=pyplete)
 
 
 def find_all_cycle(gr, gr_copy=None, number_cycle=1):
