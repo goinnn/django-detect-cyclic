@@ -29,6 +29,15 @@ In your settings.py:
 
     )
 
+Caption
+=======
+
+ * The nodes are the applications, or the modules of the applications (if you use the option show-modules)
+ * One edge means that the node source import the node destination
+ * When there is a cycle the edge has a background color (the same color in all the cycle), and it label contains "Cycle X"
+ * The label of the edges contains the weight in parentheses
+ * If you use the options show-modules, each node has a background color. If two nodes are to the same application, they have the same background color.
+
 
 Possibles Errors
 ================
