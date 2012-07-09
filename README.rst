@@ -2,7 +2,8 @@
 Django detect cyclic
 ====================
 
-Application to detect cyclic imports
+Application to detect cyclic imports.
+With this application you can analyze the dependence of your applications
 
 Requeriments
 ============
@@ -48,3 +49,5 @@ Usage (Examples)
 
     python manage.py detect_cyclic
     python manage.py detect_cyclic --include-apps="app1,app6,app7,app11" --file-name="my_graph.svg" --exclude-packages="migrations,templatetags" --verbosity=2
+    python manage.py detect_cyclic --include-apps="app1,app6" --show-modules --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
+    python manage.py detect_cyclic --include-apps="app1,app6" --only-cyclic --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
