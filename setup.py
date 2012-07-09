@@ -15,7 +15,7 @@
 # along with this software.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read(*rnames):
@@ -36,7 +36,8 @@ setup(
     license="LGPL 3",
     keywords="django,imports,cycle,cyclic imports,analyze code",
     url='https://github.com/goinnn/django-detect-cyclic',
-    packages=('django_detect_cyclic', ),
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
 )
