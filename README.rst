@@ -54,4 +54,4 @@ Usage (Examples)
     python manage.py detect_cyclic --include-apps="app1,app6" --show-modules --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
     python manage.py detect_cyclic --include-apps="app1,app6" --only-cyclic --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
 
-To see other examples click in `examples <https://github.com/goinnn/django-detect-cyclic/blob/master/EXAMPLES.md/>`_
+To see other examples click in `examples <https://github.com/goinnn/django-detect-cyclic/blob/master/EXAMPLES.rst/>`_
