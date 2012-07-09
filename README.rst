@@ -4,8 +4,19 @@ Django detect cyclic
 
 Application to detect cyclic imports
 
+Requeriments
+============
+
+ * `python-graph-core <http://pypi.python.org/pypi/python-graph-core/>`_ (1.8.1)
+ * `python-graph-dot <http://pypi.python.org/pypi/python-graph-dot/>`_ (1.8.1)
+ * `pysmell <http://pypi.python.org/pypi/pysmell/>`_ (0.7.3)
+ * `pyplete <http://pypi.python.org/pypi/pyplete/>`_ (0.0.1)
+
+
 Installation
 ============
+
+In your settings.py:
 
 ::
 
@@ -16,17 +27,9 @@ Installation
     )
 
 
-Requeriments
-============
+Possibles Errors
+================
 
- * python-graph-core
- * python-graph-dot
- * pysmell
- * `pyplete <https://github.com/goinnn/Kate-plugins/blob/master/kate_plugins/pyte_plugins/autocomplete/pyplete.py/>`_
-
-
-Recomendations
-==============
 It is possible that the next links are interested if you can some problem:
 
  * http://code.google.com/p/python-graph/issues/detail?id=15
@@ -38,8 +41,8 @@ It is possible that you have to remove the pyc files:
 
     find -iname "*.pyc" -exec rm "{}" \;
 
-Usage
-=====
+Usage (Examples)
+================
 
 ::
 
