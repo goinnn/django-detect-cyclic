@@ -45,6 +45,7 @@ def create_graph_test(*args, **kwargs):
     gr.add_node_attribute("Spain", ("fontcolor", "yellow"))
     gr.add_edge(("Portugal", "Spain"))
     gr.add_edge(("Spain", "France"))
+    gr.add_edge_attribute(("Spain", "France"), ("style", "dotted"))
     gr.add_edge(("France", "Portugal"))
     gr.add_edge(("France", "Belgium"))
     gr.add_edge(("France", "Germany"))
