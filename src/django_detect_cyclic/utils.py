@@ -69,3 +69,11 @@ class PyPlete(PyPleteOriginal):
             codefinder = CodeFinder()
         code_walk = compiler.walk(code, codefinder)
         return code_walk.modules
+
+
+def print_log_info(verbosity):
+    return verbosity > 1
+
+
+def print_log_error(verbosity):
+    return verbosity > 0

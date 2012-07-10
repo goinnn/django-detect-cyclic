@@ -53,7 +53,7 @@ class Command(BaseCommand):
             exclude_apps = options['exclude_apps'].split(',')
         if options['exclude_packages']:
             exclude_packages = options['exclude_packages'].split(',')
-        verbosity = options['verbosity'] == "2"
+        verbosity = int(options['verbosity'])
         remove_isolate_nodes = options['remove_isolate_nodes']
         remove_sink_nodes = options['remove_sink_nodes']
         remove_source_nodes = options['remove_source_nodes']

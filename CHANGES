@@ -5,6 +5,8 @@ Releases
 ------------------
 
  * Add the option "scope-global", this ignore the imports into the functions
+ * Now if the verbosity option is 1, only show the errors
+ * Now when a node (with show-modules) has the same name that a application, the node name will be app_name.__init__
 
 
 0.0.2 (2012-07-09)

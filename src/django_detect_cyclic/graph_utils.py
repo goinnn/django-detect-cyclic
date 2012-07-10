@@ -29,6 +29,8 @@ from pygraph.algorithms.cycles import find_cycle
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
 
+from django_detect_cyclic.utils import print_log_info
+
 CYCLE_COLOR_SEED = "f8c85c"
 CYCLE_LABEL = 'Cycle'
 log = logging.getLogger('django_detect_cyclic.graph_utils.py')
@@ -57,30 +59,30 @@ def create_graph_test(*args, **kwargs):
 
 
 def treatment_final_graph(gr, remove_isolated_nodes=False, remove_sink_nodes=False,
-                          remove_source_nodes=False, only_cyclic=False, verbosity=False):
+                          remove_source_nodes=False, only_cyclic=False, verbosity=1):
     if only_cyclic:
         for edge, properties in gr.edge_properties.items():
             if not CYCLE_LABEL in properties['label']:
-                if verbosity:
+                if print_log_info(verbosity):
                     log.info("Remove the edge %s-->%s" % edge)
                 gr.del_edge(edge)
     if remove_source_nodes:
         for node, incidence in gr.node_incidence.items():
             if not incidence:
-                if verbosity:
+                if print_log_info(verbosity):
                     log.info("Remove the node %s" % node)
                 gr.del_node(node)
     if remove_sink_nodes:
         for node, neighbor in gr.node_neighbors.items():
             if not neighbor:
-                if verbosity:
+                if print_log_info(verbosity):
                     log.info("Remove the node %s" % node)
                 gr.del_node(node)
     if remove_isolated_nodes:
         for node, incidence in gr.node_incidence.items():
             neighbor = gr.node_neighbors.get(node, None)
             if not incidence and not neighbor:
-                if verbosity:
+                if print_log_info(verbosity):
                     log.info("Remove the node %s" % node)
                 gr.del_node(node)
     return gr
