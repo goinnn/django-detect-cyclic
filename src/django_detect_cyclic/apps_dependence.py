@@ -98,7 +98,8 @@ def _add_edges_to_package(gr, package, app_source, applications,
         if show_modules:
             for import_code in imports_code.values():
                 node_destination = _add_node_init(
-                                        _get_module_to_generic_import(import_code.split('.'),
+                                        _get_module_to_generic_import(gr,
+                                                                      import_code.split('.'),
                                                                       pyplete=pyplete,
                                                                       verbosity=verbosity,
                                                                       scope=scope),
@@ -131,7 +132,10 @@ def _add_edge(gr, node1, node2, verbosity=1):
 
 #Functions to show modules
 
-def _get_module_to_generic_import(import_code, pyplete=None, verbosity=1, scope=None):
+def _get_module_to_generic_import(gr, import_code, pyplete=None, verbosity=1, scope=None):
+    module = '.'.join(import_code)
+    if gr.has_node(module):
+        return module
     if len(import_code) == 0:
         return None
     pyplete = pyplete or PyPlete(scope=scope)
@@ -143,8 +147,8 @@ def _get_module_to_generic_import(import_code, pyplete=None, verbosity=1, scope=
             log.error("\t File: %s SyntaxError %s" % (import_code, e))
         return None
     if imports:
-        return '.'.join(import_code)
-    return _get_module_to_generic_import(import_code[:-1], pyplete=pyplete, verbosity=verbosity, scope=scope)
+        return module
+    return _get_module_to_generic_import(gr, import_code[:-1], pyplete=pyplete, verbosity=verbosity, scope=scope)
 
 
 def _get_app_to_import(node, applications):
