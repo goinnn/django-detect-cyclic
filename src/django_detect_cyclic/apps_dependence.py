@@ -14,11 +14,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this software.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import datetime
 import logging
+
 from pygraph.classes.digraph import digraph
 
-from django_detect_cyclic.utils import PyPlete
+from django_detect_cyclic.utils import PyPlete, SCOPE_GLOBAL
 
 from django_detect_cyclic.graph_utils import find_all_cycle, print_graph, treatment_final_graph
 from django_detect_cyclic.utils import get_applications, print_log_info, print_log_error
@@ -27,37 +28,46 @@ from django_detect_cyclic.utils import get_applications, print_log_info, print_l
 log = logging.getLogger('django_detect_cyclic.apps_dependence.py')
 
 
-def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=1,
-                                 show_modules=False, remove_isolate_nodes=False, remove_sink_nodes=False,
-                                 remove_source_nodes=False, only_cyclic=False, scope=None, force_colors=False):
+def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None,
+                                 exclude_packages=None, verbosity=1, show_modules=False,
+                                 remove_isolate_nodes=False, remove_sink_nodes=False,
+                                 remove_source_nodes=False, only_cyclic=False, scope=None,
+                                 force_colors=False, dotted_scope_local=False):
+    start_time = datetime.datetime.now()
     use_colors = force_colors or file_name.endswith('.svg')
-    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope, use_colors)
+    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope, use_colors, dotted_scope_local)
     find_all_cycle(gr, use_colors=use_colors)
     treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
                               only_cyclic, verbosity=verbosity)
     print_graph(gr, file_name)
+    if print_log_info(verbosity):
+        log.info(datetime.datetime.now() - start_time)
 
 
 def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=0,
-                 show_modules=False, scope=None, use_colors=True):
+                 show_modules=False, scope=None, use_colors=True, dotted_scope_local=False):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
     if not show_modules:
         gr.add_nodes(applications)
     pyplete = PyPlete(scope=scope)
+    pyplete_global = None
+    if dotted_scope_local:
+        pyplete_global = PyPlete(scope=SCOPE_GLOBAL)
     for app_source in applications:
         if print_log_info(verbosity):
             log.info("Analizing %s" % app_source)
         _add_edges_to_package(gr, app_source, app_source, applications, pyplete,
                               exclude_packages, show_modules, verbosity,
-                              scope, use_colors)
+                              scope, use_colors, pyplete_global)
     return gr
 
 
 def _add_edges_to_package(gr, package, app_source, applications,
                           pyplete=None, exclude_packages=None,
                           show_modules=False, verbosity=1,
-                          scope=None, use_colors=True):
+                          scope=None, use_colors=True,
+                          pyplete_global=None):
     pyplete = pyplete or PyPlete(scope=scope)
     package_modules = package.split(".")
     importables_to_app = []
@@ -80,7 +90,8 @@ def _add_edges_to_package(gr, package, app_source, applications,
                                       show_modules=show_modules,
                                       verbosity=verbosity,
                                       scope=scope,
-                                      use_colors=use_colors)
+                                      use_colors=use_colors,
+                                      pyplete_global=pyplete_global)
         if importable_type != 'module':
             continue
         if show_modules:
@@ -97,6 +108,7 @@ def _add_edges_to_package(gr, package, app_source, applications,
             continue
         if show_modules:
             for import_code in imports_code.values():
+                dotted = False
                 node_destination = _add_node_init(
                                         _get_module_to_generic_import(gr,
                                                                       import_code.split('.'),
@@ -108,7 +120,10 @@ def _add_edges_to_package(gr, package, app_source, applications,
                     added = _add_node_module(gr, node_destination, applications,
                                              use_colors=use_colors)
                     if added:
-                        _add_edge(gr, node_source, node_destination, verbosity)
+                        if pyplete_global and not _has_scope_global(gr, node_source, node_destination):
+                            imports_code_global = pyplete_global.get_pysmell_modules_to_text(code)['POINTERS']
+                            dotted = not import_code in imports_code_global.values()
+                        _add_edge(gr, node_source, node_destination, verbosity, dotted)
         else:
             for import_code in imports_code.values():
                 if not import_code.startswith(app_source):
@@ -118,7 +133,7 @@ def _add_edges_to_package(gr, package, app_source, applications,
                             break
 
 
-def _add_edge(gr, node1, node2, verbosity=1):
+def _add_edge(gr, node1, node2, verbosity=1, dotted=False):
     if print_log_info(verbosity):
         log.info('\t %s --> %s' % (node1, node2))
     if not gr.has_edge((node1, node2)):
@@ -128,6 +143,14 @@ def _add_edge(gr, node1, node2, verbosity=1):
         weight = gr.edge_weight((node1, node2)) + 1
         gr.set_edge_weight((node1, node2), weight)
         gr.set_edge_label((node1, node2), "(%s)" % weight)
+    if dotted:
+        gr.add_edge_attribute((node1, node2), ("style", "dotted"))
+    else:
+        gr.add_edge_attribute((node1, node2), ("style", "filled"))
+
+
+def _has_scope_global(gr, node1, node2):
+    return dict(gr.edge_attributes((node1, node2))).get('style') == 'filled'
 
 
 #Functions to show modules

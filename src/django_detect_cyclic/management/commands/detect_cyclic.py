@@ -13,11 +13,12 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this software.  If not, see <http://www.gnu.org/licenses/>.
-
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
+from django_detect_cyclic.exceptions import InvalidOptions
+from django_detect_cyclic.utils import SCOPE_GLOBAL
 
 
 class Command(BaseCommand):
@@ -45,6 +46,8 @@ class Command(BaseCommand):
                     help='The imports into the functions are ignored'),
             make_option('-c', '--force-colors', dest='force_colors',  action="store_true",
                     help='You can use this option when the format are not svg'),
+            make_option('-d', '--dotted-scope-local', dest='dotted_scope_local',  action="store_true",
+                    help='The imports into the functions are printing with dotted line'),
     )
 
     def handle(self, *args, **options):
@@ -65,8 +68,20 @@ class Command(BaseCommand):
         show_modules = options['show_modules']
         file_name = options['file_name']
         force_colors = options['force_colors']
-        scope = options['scope_global'] and 'global' or None
-        create_graph_apps_dependence(file_name, include_apps, exclude_apps, exclude_packages,
-                                     verbosity, show_modules, remove_isolate_nodes,
-                                     remove_sink_nodes, remove_source_nodes, only_cyclic,
-                                     scope, force_colors)
+        dotted_scope_local = options['dotted_scope_local']
+        scope = options['scope_global'] and SCOPE_GLOBAL or None
+        if dotted_scope_local and scope == SCOPE_GLOBAL:
+            raise InvalidOptions("The dotted-scope-local and scope-global are incompatibles")
+        create_graph_apps_dependence(file_name=file_name,
+                                     include_apps=include_apps,
+                                     exclude_apps=exclude_apps,
+                                     exclude_packages=exclude_packages,
+                                     verbosity=verbosity,
+                                     show_modules=show_modules,
+                                     remove_isolate_nodes=remove_isolate_nodes,
+                                     remove_sink_nodes=remove_sink_nodes,
+                                     remove_source_nodes=remove_source_nodes,
+                                     only_cyclic=only_cyclic,
+                                     scope=scope,
+                                     force_colors=force_colors,
+                                     dotted_scope_local=dotted_scope_local)

@@ -22,6 +22,9 @@ from pyplete import PyPlete as PyPleteOriginal
 from pysmell.codefinder import CodeFinder, getName, getFuncArgs
 
 
+SCOPE_GLOBAL = 'global'
+
+
 def get_applications(include=None, exclude=None):
     if include:
         return include
@@ -63,7 +66,7 @@ class PyPlete(PyPleteOriginal):
                 #self.visit(func.code) Remove this line
                 self.exitScope()
 
-        if self.scope == 'global':
+        if self.scope == SCOPE_GLOBAL:
             codefinder = GlobalCodeFinder()
         else:
             codefinder = CodeFinder()
