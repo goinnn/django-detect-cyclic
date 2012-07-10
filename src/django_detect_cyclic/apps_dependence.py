@@ -181,10 +181,15 @@ def _get_module_to_generic_import(gr, import_code, pyplete=None, verbosity=1, sc
 
 
 def _get_app_to_import(node, applications):
+    score = len(node)
+    candidate = None
     for app in applications:
         if node.startswith(app):
-            return app
-    return None
+            current_score = len(node) - len(app)
+            if current_score < score:
+                score = current_score
+                candidate = app
+    return candidate
 
 
 def _get_app_colors(app):

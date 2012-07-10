@@ -11,6 +11,7 @@ Releases
  * Now disabled the colors of the edge and nodes when the format is not svg. But it is possible enabled if you use the "force color" option
  * Optimizations
  * New option "dotted-scope-local". If the all import between two nodes are into a function the edge will be dotted
+ * Fixed some little errors
 
 0.0.2 (2012-07-09)
 ------------------
