@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this software.  If not, see <http://www.gnu.org/licenses/>.
 
+import compiler
 
 from django.conf import settings
+
+from pyplete import PyPlete as PyPleteOriginal
+from pysmell.codefinder import CodeFinder, getName, getFuncArgs
 
 
 def get_applications(include=None, exclude=None):
@@ -25,3 +29,43 @@ def get_applications(include=None, exclude=None):
     if exclude:
         apps = tuple(set(apps) - set(exclude))
     return apps
+
+
+class PyPlete(PyPleteOriginal):
+
+    def __init__(self, func_info=None, pythonpath=None, separator='.', scope=None, *args, **kwargs):
+        super(PyPlete, self).__init__(func_info=func_info,
+                                      pythonpath=pythonpath,
+                                      separator=separator,
+                                      *args, **kwargs)
+        self.scope = scope
+
+    def get_pysmell_modules_to_text(self, text):
+        code = compiler.parse(text)
+
+        class GlobalCodeFinder(CodeFinder):
+
+            def visitFunction(self, func):
+                self.enterScope(func)
+                if self.inClassFunction:
+                    if func.name != '__init__':
+                        if func.decorators and 'property' in [getName(n) for n in func.decorators]:
+                            self.modules.addProperty(self.currentClass, func.name)
+                        else:
+                            self.modules.addMethod(self.currentClass, func.name,
+                                            getFuncArgs(func), func.doc or "")
+                    else:
+                        self.modules.setConstructor(self.currentClass, getFuncArgs(func))
+                elif len(self.scope) == 1:
+                    self.modules.addFunction(func.name, getFuncArgs(func,
+                                        inClass=False), func.doc or "")
+
+                #self.visit(func.code) Remove this line
+                self.exitScope()
+
+        if self.scope == 'global':
+            codefinder = GlobalCodeFinder()
+        else:
+            codefinder = CodeFinder()
+        code_walk = compiler.walk(code, codefinder)
+        return code_walk.modules

@@ -18,7 +18,7 @@
 import logging
 from pygraph.classes.digraph import digraph
 
-from pyplete import PyPlete
+from django_detect_cyclic.utils import PyPlete
 
 from django_detect_cyclic.graph_utils import find_all_cycle, print_graph, treatment_final_graph
 from django_detect_cyclic.utils import get_applications
@@ -29,8 +29,8 @@ log = logging.getLogger('django_detect_cyclic.apps_dependence.py')
 
 def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False,
                                  show_modules=False, remove_isolate_nodes=False, remove_sink_nodes=False,
-                                 remove_source_nodes=False, only_cyclic=False):
-    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules)
+                                 remove_source_nodes=False, only_cyclic=False, scope=None):
+    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope)
     find_all_cycle(gr)
     treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
                               only_cyclic, verbosity=verbosity)
@@ -38,23 +38,23 @@ def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None
 
 
 def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=False,
-                 show_modules=False):
+                 show_modules=False, scope=None):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
     if not show_modules:
         gr.add_nodes(applications)
-    pyplete = PyPlete()
+    pyplete = PyPlete(scope=scope)
     for app_source in applications:
         if verbosity:
             log.info("Analizing %s" % app_source)
-        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, show_modules, verbosity)
+        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, show_modules, verbosity, scope)
     return gr
 
 
 def _add_edges_to_package(gr, package, app_source, applications,
                           pyplete=None, exclude_packages=None,
-                          show_modules=False, verbosity=False):
-    pyplete = pyplete or PyPlete()
+                          show_modules=False, verbosity=False, scope=None):
+    pyplete = pyplete or PyPlete(scope=scope)
     package_modules = package.split(".")
     importables_to_app = []
     try:
@@ -74,7 +74,8 @@ def _add_edges_to_package(gr, package, app_source, applications,
                 _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
                                       exclude_packages=exclude_packages,
                                       show_modules=show_modules,
-                                      verbosity=verbosity)
+                                      verbosity=verbosity,
+                                      scope=scope)
         if importable_type != 'module':
             continue
         if show_modules:
@@ -91,7 +92,10 @@ def _add_edges_to_package(gr, package, app_source, applications,
             continue
         if show_modules:
             for import_code in imports_code.values():
-                node_destination = _get_module_to_generic_import(import_code.split('.'), pyplete=pyplete, verbosity=verbosity)
+                node_destination = _get_module_to_generic_import(import_code.split('.'),
+                                                                 pyplete=pyplete,
+                                                                 verbosity=verbosity,
+                                                                 scope=scope)
                 if node_destination:
                     added = _add_node_module(gr, node_destination, applications)
                     if added:
@@ -106,21 +110,21 @@ def _add_edges_to_package(gr, package, app_source, applications,
 
 
 def _add_edge(gr, node1, node2, verbosity=False):
+    if verbosity:
+        log.info('\t %s --> %s' % (node1, node2))
     if not gr.has_edge((node1, node2)):
-        if verbosity:
-            log.info('\t %s --> %s' % (node1, node2))
         gr.add_edge((node1, node2))
         gr.set_edge_label((node1, node2), "(1)")
     else:
-        weight = gr.edge_weight((node1, node2))
-        gr.set_edge_weight((node1, node2), weight + 1)
+        weight = gr.edge_weight((node1, node2)) + 1
+        gr.set_edge_weight((node1, node2), weight)
         gr.set_edge_label((node1, node2), "(%s)" % weight)
 
 
-def _get_module_to_generic_import(import_code, pyplete=None, verbosity=False):
+def _get_module_to_generic_import(import_code, pyplete=None, verbosity=False, scope=None):
     if len(import_code) == 0:
         return None
-    pyplete = pyplete or PyPlete()
+    pyplete = pyplete or PyPlete(scope=scope)
     imports = []
     try:
         pyplete.get_importables_rest_level(imports, import_code[0], import_code[1:])
@@ -130,7 +134,7 @@ def _get_module_to_generic_import(import_code, pyplete=None, verbosity=False):
         return None
     if imports:
         return '.'.join(import_code)
-    return _get_module_to_generic_import(import_code[:-1], pyplete=pyplete, verbosity=verbosity)
+    return _get_module_to_generic_import(import_code[:-1], pyplete=pyplete, verbosity=verbosity, scope=scope)
 
 
 def _get_app_to_import(node, applications):

@@ -41,6 +41,8 @@ class Command(BaseCommand):
                     help='Remove the nodes without cyclic'),
             make_option('-s', '--show-modules', dest='show_modules',  action="store_true",
                     help='The nodes now are the modules (by default are the applications)'),
+            make_option('-g', '--scope-global', dest='scope_global',  action="store_true",
+                    help='The imports into the functions are ignored'),
     )
 
     def handle(self, *args, **options):
@@ -60,6 +62,8 @@ class Command(BaseCommand):
             remove_isolate_nodes = True
         show_modules = options['show_modules']
         file_name = options['file_name']
+        scope = options['scope_global'] and 'global' or None
         create_graph_apps_dependence(file_name, include_apps, exclude_apps, exclude_packages,
                                      verbosity, show_modules, remove_isolate_nodes,
-                                     remove_sink_nodes, remove_source_nodes, only_cyclic)
+                                     remove_sink_nodes, remove_source_nodes, only_cyclic,
+                                     scope)

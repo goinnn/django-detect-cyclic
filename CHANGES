@@ -1,6 +1,12 @@
 Releases
 ========
 
+0.0.3 (2012-07-??)
+------------------
+
+ * Add the option "scope-global", this ignore the imports into the functions
+
+
 0.0.2 (2012-07-09)
 ------------------
 
