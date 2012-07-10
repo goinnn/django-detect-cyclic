@@ -87,7 +87,7 @@ def _add_edges_to_package(gr, package, app_source, applications,
             node = package_modules + [importable_to_app]
             node_source = _add_node_init('.'.join(node), applications)
             if not gr.has_node(node_source):
-                _add_node_module(gr, node_source, applications, use_colors=use_colors)
+                _add_node_module(gr, node_source, applications, app_source=app_source, use_colors=use_colors)
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
@@ -168,19 +168,22 @@ def _get_app_colors(app):
     return (fillcolor, fontcolor)
 
 
-def _add_node_module(gr, node, applications, use_colors=True):
-    app = _get_app_to_import(node, applications)
-    if app:
-        if not gr.has_node(node):
-            gr.add_node(node)
-            if use_colors:
-                fillcolor, fontcolor = _get_app_colors(app)
-                gr.add_node_attribute(node, ("fillcolor", fillcolor))
-                gr.add_node_attribute(node, ("color", fontcolor))
-                gr.add_node_attribute(node, ("fontcolor", fontcolor))
-                gr.add_node_attribute(node, ("style", "filled"))
-        return True
-    return False
+def _add_node_module(gr, node, applications, app_source=None, use_colors=True):
+    has_node = gr.has_node(node)
+    if not has_node:
+        app = app_source or _get_app_to_import(node, applications)
+        if app:
+            if not has_node:
+                gr.add_node(node)
+                if use_colors:
+                    fillcolor, fontcolor = _get_app_colors(app)
+                    gr.add_node_attribute(node, ("fillcolor", fillcolor))
+                    gr.add_node_attribute(node, ("color", fontcolor))
+                    gr.add_node_attribute(node, ("fontcolor", fontcolor))
+                    gr.add_node_attribute(node, ("style", "filled"))
+            return True
+        return False
+    return True
 
 
 def _add_node_init(node, applications):
