@@ -41,7 +41,7 @@ def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None
                               only_cyclic, verbosity=verbosity)
     print_graph(gr, file_name)
     if print_log_info(verbosity):
-        log.info(datetime.datetime.now() - start_time)
+        log.info("Duration: %s" % str(datetime.datetime.now() - start_time))
 
 
 def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=0,

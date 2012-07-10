@@ -1,9 +1,20 @@
-Call to the command without options (only verbosity):
+====================
+Django detect cyclic
+====================
+
+Examples
+========
+
+In these examples we propose a tipical secuence to find the cycles in our project, and can see dangerous dependencies
+
+
+Call to the command without options (only verbosity, and exclude the south migrations):
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-first.svg" --verbosity=2
-    ./bin/django detect_cyclic --file-name="examples/example-first.png" --verbosity=2
+    ./bin/django detect_cyclic --file-name="examples/example-first.svg" --verbosity=2 --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-first.png" --verbosity=2 --exclude-packages=migrations
+    INFO: Duration: 0:00:06.611381
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-first.png
 
@@ -11,8 +22,9 @@ In this image I can not see anything. I am interested in the cycles, I use this 
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.svg" --verbosity=2 --only-cyclic
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.png" --verbosity=2 --only-cyclic
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.svg" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.png" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    INFO: Duration: 0:00:06.535613
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-only-cyclic.png
 
@@ -20,8 +32,9 @@ I exclude the django applications (exclude-apps):
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.svg" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.png" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.svg" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.png" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    INFO: Duration: 0:00:05.038461
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-only-cyclic-exclude.png
 
@@ -29,7 +42,61 @@ I want to analize the cycles. I need to know modules which are involved in these
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-modules.svg" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules
-    ./bin/django detect_cyclic --file-name="examples/example-modules.png" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules
+    ./bin/django detect_cyclic --file-name="examples/example-modules.svg" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-modules.png" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations
+    INFO: Duration: 0:00:27.532323
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-modules.png
+
+
+Also I want to know what import is into a function and what import is a global import (dotted-scope-local):
+
+::
+
+    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.svg" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
+    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.png" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
+    INFO: Duration: 0:00:34.074046
+
+We can use other options, instead of only-cyclic we could use remove-isolate-nodes, remove-source-nodes or remove-sink-nodes to limit the graph.
+We can use scope-global to see only the global imports.
+
+::
+
+    Options:
+        -v VERBOSITY, --verbosity=VERBOSITY
+                                Verbosity level; 0=minimal output, 1=normal output,
+                                2=all output
+        --settings=SETTINGS   The Python path to a settings module, e.g.
+                                "myproject.settings.main". If this isn't provided, the
+                                DJANGO_SETTINGS_MODULE environment variable will be
+                                used.
+        --pythonpath=PYTHONPATH
+                                A directory to add to the Python path, e.g.
+                                "/home/djangoprojects/myproject".
+        --traceback           Print traceback on exception
+        -i INCLUDE_APPS, --include-apps=INCLUDE_APPS
+                                Only use these applications to the graph (separated by
+                                commas)
+        -e EXCLUDE_APPS, --exclude-apps=EXCLUDE_APPS
+                                Exclude these apps to the graph (separated by commas)
+        -f FILE_NAME, --file-name=FILE_NAME
+                                Exclude these apps to the graph (separated by commas)
+        -p EXCLUDE_PACKAGES, --exclude-packages=EXCLUDE_PACKAGES
+                                Exclude the next packages. For example
+                                migrations,templatetags (separated by commas)
+        -r, --remove-isolate-nodes
+                                Remove the isolate nodes
+        -k, --remove-sink-nodes
+                                Remove the sink nodes
+        -a, --remove-source-nodes
+                                Remove the source nodes
+        -o, --only-cyclic     Remove the nodes without cyclic
+        -s, --show-modules    The nodes now are the modules (by default are the
+                                applications)
+        -g, --scope-global    The imports into the functions are ignored
+        -c, --force-colors    You can use this option when the format are not svg
+        -d, --dotted-scope-local
+                                The imports into the functions are printing with
+                                dotted line
+        --version             show program's version number and exit
+        -h, --help            show this help message and exit

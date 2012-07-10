@@ -37,6 +37,7 @@ Caption
  * When there is a cycle the edge has a background color (the same color in all the cycle), and it label contains "Cycle X"
  * The label of the edges contains the weight in parentheses
  * If you use the options show-modules, each node has a background color. If two nodes are to the same application, they have the same background color.
+ * If a edge is dotted, every import between these two nodes is into a function
 
 
 Possibles Errors
@@ -53,8 +54,8 @@ It is possible that you have to remove the pyc files:
 
     find -iname "*.pyc" -exec rm "{}" \;
 
-Usage (Examples)
-================
+Usage 
+=====
 
 ::
 
@@ -63,4 +64,8 @@ Usage (Examples)
     python manage.py detect_cyclic --include-apps="app1,app6" --show-modules --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
     python manage.py detect_cyclic --include-apps="app1,app6" --only-cyclic --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
 
-To see other examples click in `examples <https://github.com/goinnn/django-detect-cyclic/blob/master/EXAMPLES.rst/>`_
+
+Examples
+========
+
+To see more examples click in `examples <https://github.com/goinnn/django-detect-cyclic/blob/master/EXAMPLES.rst/>`_
