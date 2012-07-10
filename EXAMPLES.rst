@@ -5,7 +5,7 @@ Django detect cyclic
 Examples
 ========
 
-In these examples we propose a tipical secuence to find the cycles in our project, and can see dangerous dependencies
+In these examples we propose a typical sequence to find the cycles in our project, and can see dangerous dependencies
 
 
 Call to the command without options (only verbosity, and exclude the south migrations):
@@ -56,6 +56,8 @@ Also I want to know what import is into a function and what import is a global i
     ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.svg" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
     ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.png" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
     INFO: Duration: 0:00:34.074046
+
+.. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-modules-dotted.png
 
 We can use other options, instead of only-cyclic we could use remove-isolate-nodes, remove-source-nodes or remove-sink-nodes to limit the graph.
 We can use scope-global to see only the global imports.
