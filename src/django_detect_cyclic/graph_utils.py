@@ -20,7 +20,9 @@ import sys
 try:
     import gv
 except ImportError:
-    sys.path.append('/usr/lib/pyshared/python2.6')
+    version_info = sys.version_info
+    # http://stackoverflow.com/questions/2133767/using-python-graphviz-importerror-no-module-named-gv#comment14947383_2321371
+    sys.path.append('/usr/lib/pyshared/python%s.%s' % (version_info[0], version_info[1]))
     import gv
 
 from copy import deepcopy
