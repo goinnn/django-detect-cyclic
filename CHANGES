@@ -1,7 +1,7 @@
 Releases
 ========
 
-0.0.3 (2012-07-??)
+0.0.3 (2012-07-10)
 ------------------
 
  * Add the option "scope-global", this ignore the imports into the functions
@@ -10,7 +10,7 @@ Releases
  * Now the label of the cycle edges has the same color that the edge
  * Now disabled the colors of the edge and nodes when the format is not svg. But it is possible enabled if you use the "force color" option
  * Optimizations
-
+ * New option "dotted-scope-local". If the all import between two nodes are into a function the edge will be dotted
 
 0.0.2 (2012-07-09)
 ------------------

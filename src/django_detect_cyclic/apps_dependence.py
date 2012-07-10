@@ -108,7 +108,6 @@ def _add_edges_to_package(gr, package, app_source, applications,
             continue
         if show_modules:
             for import_code in imports_code.values():
-                dotted = False
                 node_destination = _add_node_init(
                                         _get_module_to_generic_import(gr,
                                                                       import_code.split('.'),
@@ -120,20 +119,21 @@ def _add_edges_to_package(gr, package, app_source, applications,
                     added = _add_node_module(gr, node_destination, applications,
                                              use_colors=use_colors)
                     if added:
-                        if pyplete_global and not _has_scope_global(gr, node_source, node_destination):
-                            imports_code_global = pyplete_global.get_pysmell_modules_to_text(code)['POINTERS']
-                            dotted = not import_code in imports_code_global.values()
-                        _add_edge(gr, node_source, node_destination, verbosity, dotted)
+                        style = _edge_style(pyplete_global, gr, node_source,
+                                            node_destination, import_code, code)
+                        _add_edge(gr, node_source, node_destination, verbosity, style)
         else:
             for import_code in imports_code.values():
                 if not import_code.startswith(app_source):
                     for app_destination in applications:
                         if import_code.startswith(app_destination):
-                            _add_edge(gr, app_source, app_destination, verbosity)
+                            style = _edge_style(pyplete_global, gr, app_source,
+                                                app_destination, import_code, code)
+                            _add_edge(gr, app_source, app_destination, verbosity, style)
                             break
 
 
-def _add_edge(gr, node1, node2, verbosity=1, dotted=False):
+def _add_edge(gr, node1, node2, verbosity=1, style="filled"):
     if print_log_info(verbosity):
         log.info('\t %s --> %s' % (node1, node2))
     if not gr.has_edge((node1, node2)):
@@ -143,14 +143,20 @@ def _add_edge(gr, node1, node2, verbosity=1, dotted=False):
         weight = gr.edge_weight((node1, node2)) + 1
         gr.set_edge_weight((node1, node2), weight)
         gr.set_edge_label((node1, node2), "(%s)" % weight)
-    if dotted:
-        gr.add_edge_attribute((node1, node2), ("style", "dotted"))
-    else:
-        gr.add_edge_attribute((node1, node2), ("style", "filled"))
+    gr.add_edge_attribute((node1, node2), ("style", style))
 
 
 def _has_scope_global(gr, node1, node2):
     return dict(gr.edge_attributes((node1, node2))).get('style') == 'filled'
+
+
+def _edge_style(pyplete_global, gr, node1, node2, import_code, code):
+    dotted = "filled"
+    if pyplete_global and not _has_scope_global(gr, node1, node2):
+        imports_code_global = pyplete_global.get_pysmell_modules_to_text(code)['POINTERS']
+        if not import_code in imports_code_global.values():
+            dotted = "dotted"
+    return dotted
 
 
 #Functions to show modules
