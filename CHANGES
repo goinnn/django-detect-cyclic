@@ -8,6 +8,7 @@ Releases
  * Now if the verbosity option is 1, only show the errors
  * Now when a node (with show-modules) has the same name that a application, the node name will be app_name.__init__
  * Now the label of the cycle edges has the same color that the edge
+ * Now disabled the colors of the edge and nodes when the format is not svg. But it is possible enabled if you use the "force color" option
 
 
 0.0.2 (2012-07-09)

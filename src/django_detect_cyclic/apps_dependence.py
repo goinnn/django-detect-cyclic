@@ -29,16 +29,17 @@ log = logging.getLogger('django_detect_cyclic.apps_dependence.py')
 
 def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=1,
                                  show_modules=False, remove_isolate_nodes=False, remove_sink_nodes=False,
-                                 remove_source_nodes=False, only_cyclic=False, scope=None):
-    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope)
-    find_all_cycle(gr)
+                                 remove_source_nodes=False, only_cyclic=False, scope=None, force_colors=False):
+    use_colors = force_colors or file_name.endswith('.svg')
+    gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope, use_colors)
+    find_all_cycle(gr, use_colors=use_colors)
     treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
                               only_cyclic, verbosity=verbosity)
     print_graph(gr, file_name)
 
 
 def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, verbosity=0,
-                 show_modules=False, scope=None):
+                 show_modules=False, scope=None, use_colors=True):
     gr = digraph()
     applications = get_applications(include_apps, exclude_apps)
     if not show_modules:
@@ -47,13 +48,16 @@ def create_graph(include_apps=None, exclude_apps=None, exclude_packages=None, ve
     for app_source in applications:
         if print_log_info(verbosity):
             log.info("Analizing %s" % app_source)
-        _add_edges_to_package(gr, app_source, app_source, applications, pyplete, exclude_packages, show_modules, verbosity, scope)
+        _add_edges_to_package(gr, app_source, app_source, applications, pyplete,
+                              exclude_packages, show_modules, verbosity,
+                              scope, use_colors)
     return gr
 
 
 def _add_edges_to_package(gr, package, app_source, applications,
                           pyplete=None, exclude_packages=None,
-                          show_modules=False, verbosity=1, scope=None):
+                          show_modules=False, verbosity=1,
+                          scope=None, use_colors=True):
     pyplete = pyplete or PyPlete(scope=scope)
     package_modules = package.split(".")
     importables_to_app = []
@@ -75,14 +79,15 @@ def _add_edges_to_package(gr, package, app_source, applications,
                                       exclude_packages=exclude_packages,
                                       show_modules=show_modules,
                                       verbosity=verbosity,
-                                      scope=scope)
+                                      scope=scope,
+                                      use_colors=use_colors)
         if importable_type != 'module':
             continue
         if show_modules:
             node = package_modules + [importable_to_app]
             node_source = _add_node_init('.'.join(node), applications)
             if not gr.has_node(node_source):
-                _add_node_module(gr, node_source, applications)
+                _add_node_module(gr, node_source, applications, use_colors=use_colors)
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
@@ -99,7 +104,8 @@ def _add_edges_to_package(gr, package, app_source, applications,
                                                                       scope=scope),
                                         applications)
                 if node_destination:
-                    added = _add_node_module(gr, node_destination, applications)
+                    added = _add_node_module(gr, node_destination, applications,
+                                             use_colors=use_colors)
                     if added:
                         _add_edge(gr, node_source, node_destination, verbosity)
         else:
@@ -158,16 +164,17 @@ def _get_app_colors(app):
     return (fillcolor, fontcolor)
 
 
-def _add_node_module(gr, node, applications):
+def _add_node_module(gr, node, applications, use_colors=True):
     app = _get_app_to_import(node, applications)
     if app:
         if not gr.has_node(node):
-            fillcolor, fontcolor = _get_app_colors(app)
             gr.add_node(node)
-            gr.add_node_attribute(node, ("fillcolor", fillcolor))
-            gr.add_node_attribute(node, ("color", fontcolor))
-            gr.add_node_attribute(node, ("fontcolor", fontcolor))
-            gr.add_node_attribute(node, ("style", "filled"))
+            if use_colors:
+                fillcolor, fontcolor = _get_app_colors(app)
+                gr.add_node_attribute(node, ("fillcolor", fillcolor))
+                gr.add_node_attribute(node, ("color", fontcolor))
+                gr.add_node_attribute(node, ("fontcolor", fontcolor))
+                gr.add_node_attribute(node, ("style", "filled"))
         return True
     return False
 

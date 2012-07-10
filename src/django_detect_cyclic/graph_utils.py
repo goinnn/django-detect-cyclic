@@ -88,15 +88,15 @@ def treatment_final_graph(gr, remove_isolated_nodes=False, remove_sink_nodes=Fal
     return gr
 
 
-def find_all_cycle(gr, gr_copy=None, number_cycle=1):
+def find_all_cycle(gr, gr_copy=None, use_colors=True, number_cycle=1):
     gr_copy = gr_copy or deepcopy(gr)
     cycle = find_cycle(gr_copy)
     if cycle:
-        mark_cycle(gr, cycle, number_cycle, gr_copy)
-        find_all_cycle(gr, gr_copy, number_cycle=number_cycle + 1)
+        mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=use_colors)
+        find_all_cycle(gr, gr_copy, use_colors, number_cycle=number_cycle + 1)
 
 
-def mark_cycle(gr, cycle, number_cycle, gr_copy):
+def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
     i = 0
     while i < len(cycle):
         item = cycle[i]
@@ -106,11 +106,12 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy):
             next_item = cycle[0]
         weight = gr.edge_weight((item, next_item))
         gr.set_edge_label((item, next_item), "%s %s (%s)" % (CYCLE_LABEL, number_cycle, weight))
-        cycle_color = '#%s' % hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
-        gr.add_edge_attribute((item, next_item), ("color", cycle_color))
-        gr.add_edge_attribute((item, next_item), ("fontcolor", cycle_color))
         gr_copy.del_edge((item, next_item))
         i += 1
+        if use_colors:
+            cycle_color = '#%s' % hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
+            gr.add_edge_attribute((item, next_item), ("color", cycle_color))
+            gr.add_edge_attribute((item, next_item), ("fontcolor", cycle_color))
 
 
 def print_graph(gr, name):
