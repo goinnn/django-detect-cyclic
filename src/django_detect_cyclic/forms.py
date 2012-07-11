@@ -18,13 +18,14 @@ import os
 import pydot
 
 from django import forms
+from django.forms.util import ErrorList
 from django.contrib.admin import widgets as widgets_admin
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
-from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL
+from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL, compatible_scope
 
 
 class DetectCyclicForm(forms.Form):
@@ -86,6 +87,16 @@ class DetectCyclicForm(forms.Form):
 
     def clean_file_name(self):
         return str(slugify(self.cleaned_data['file_name']))
+
+    def clean(self):
+        cleaned_data = super(DetectCyclicForm, self).clean()
+        dotted_scope_local = cleaned_data['dotted_scope_local']
+        scope_global = cleaned_data['scope_global']
+        if not compatible_scope(dotted_scope_local, scope_global):
+            scope_global = self._errors.get('scope_global', ErrorList())
+            scope_global.append(_('This option is incompatible with dotted scope local'))
+            self._errors['scope_global'] = scope_global
+        return cleaned_data
 
     def detect_cyclic(self):
         file_name = str(os.path.join(settings.MEDIA_ROOT,

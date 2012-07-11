@@ -81,3 +81,9 @@ def print_log_info(verbosity):
 
 def print_log_error(verbosity):
     return verbosity > 0
+
+
+def compatible_scope(dotted_scope_local, scope_global):
+    if dotted_scope_local and scope_global:
+        return False
+    return True

@@ -18,7 +18,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 from django_detect_cyclic.exceptions import InvalidOptions
-from django_detect_cyclic.utils import SCOPE_GLOBAL, DEFAULT_FILENAME
+from django_detect_cyclic.utils import SCOPE_GLOBAL, DEFAULT_FILENAME, compatible_scope
 
 
 class Command(BaseCommand):
@@ -69,8 +69,9 @@ class Command(BaseCommand):
         file_name = options['file_name']
         force_colors = options['force_colors']
         dotted_scope_local = options['dotted_scope_local']
-        scope = options['scope_global'] and SCOPE_GLOBAL or None
-        if dotted_scope_local and scope == SCOPE_GLOBAL:
+        scope_global = options['scope_global']
+        scope = scope_global and SCOPE_GLOBAL or None
+        if not compatible_scope(dotted_scope_local, scope_global):
             raise InvalidOptions("The dotted-scope-local and scope-global are incompatibles")
         create_graph_apps_dependence(file_name=file_name,
                                      include_apps=include_apps,
