@@ -18,7 +18,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 from django_detect_cyclic.exceptions import InvalidOptions
-from django_detect_cyclic.utils import SCOPE_GLOBAL
+from django_detect_cyclic.utils import SCOPE_GLOBAL, DEFAULT_FILENAME
 
 
 class Command(BaseCommand):
@@ -28,7 +28,7 @@ class Command(BaseCommand):
                     help='Only use these applications to the graph (separated by commas)'),
             make_option('-e', '--exclude-apps', dest='exclude_apps',
                     help='Exclude these apps to the graph (separated by commas)'),
-            make_option('-f', '--file-name', dest='file_name', default='detect.svg',
+            make_option('-f', '--file-name', dest='file_name', default='%s.svg' % DEFAULT_FILENAME,
                     help='Exclude these apps to the graph (separated by commas)'),
             make_option('-p', '--exclude-packages', dest='exclude_packages',
                     help='Exclude the next packages. For example migrations,templatetags (separated by commas)'),

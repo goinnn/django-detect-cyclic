@@ -1,3 +1,5 @@
+.. contents::
+
 ====================
 Django detect cyclic
 ====================
@@ -14,6 +16,7 @@ Requeriments
  * `python-graph-dot <http://pypi.python.org/pypi/python-graph-dot/>`_ (1.8.1)
  * `pysmell <http://pypi.python.org/pypi/pysmell/>`_ (0.7.3)
  * `pyplete <http://pypi.python.org/pypi/pyplete/>`_ (0.0.1)
+ * `django-form-admin <http://pypi.python.org/pypi/django-form-admin>`_ (0.3.2) (optional)
 
 
 Installation
@@ -26,6 +29,16 @@ In your settings.py:
     INSTALLED_APPS = (
 
         'django_detect_cyclic',
+
+    )
+
+In your urls.py:
+
+::
+
+    urlpatterns = patterns('',
+
+        (r'^admin/detect_cyclic/', include('django_detect_cyclic.urls')),
 
     )
 
@@ -57,12 +70,20 @@ It is possible that you have to remove the pyc files:
 Usage 
 =====
 
+You have two ways, you can run a command:
+
 ::
 
     python manage.py detect_cyclic
     python manage.py detect_cyclic --include-apps="app1,app6,app7,app11" --file-name="my_graph.svg" --exclude-packages="migrations,templatetags" --verbosity=2
     python manage.py detect_cyclic --include-apps="app1,app6" --show-modules --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
     python manage.py detect_cyclic --include-apps="app1,app6" --only-cyclic --file-name="my_graph.svg" --exclude-packages="migrations" --verbosity=2
+
+Or you can access via web to the wizard:
+
+::
+
+   /admin/detect_cyclic/
 
 
 Examples

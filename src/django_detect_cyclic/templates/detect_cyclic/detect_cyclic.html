@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+    <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
+    {{ form.media }}
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}admin/css/forms.css" />
+{% endblock %}
+
+{% block coltype %}
+    {% if ordered_objects %}colMS{% else %}colM{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        {% if img_src %}
+            <img src="{{ img_src }}"/>
+            <p>
+                <a href="{{ img_src }}" target="_blank">{% trans "Download" %}</a>
+            </p>
+        {% endif %}
+        <form action="." method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <div>
+                <input type="submit" name="submit" value="{% trans "Create Graph" %}"/>
+            </div>
+        </form>
+    </div>
+{% endblock %}
