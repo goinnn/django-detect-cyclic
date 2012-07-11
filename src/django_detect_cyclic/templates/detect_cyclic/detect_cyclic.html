@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 
-{% load i18n %}
+{% load i18n inplace_edit %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -8,6 +8,31 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
     <script type="text/javascript" src="{{ jsi18nurl|default:"../../jsi18n/" }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
+    {% if not img_src and gr %}
+        <!--     https://github.com/strathausen/dracula/tarball/v0.0.3alpha5 -->
+        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/raphael-min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graffle.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graph.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript">
+        (function($) {
+            $(document).ready(function () {
+                var redraw;
+                var height = 300;
+                var width = 400;
+                var g = new Graph();
+                {% for edge in gr %}
+                    console.log("{{ edge.0 }}" + "-->" + "{{ edge.1 }}");
+                    g.addEdge("{{ edge.0 }}", "{{ edge.1 }}", {label: "AAA"});
+                {% endfor %}
+
+                var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
+                renderer.draw();
+            });
+        })(jQuery);
+        </script>
+    {% endif %}
+
     {{ form.media }}
 {% endblock %}
 
@@ -34,6 +59,9 @@
             <p>
                 <a href="{{ img_src }}" target="_blank">{% trans "Download" %}</a>
             </p>
+        {% endif %}
+        {% if not img_src and gr %}
+            {{  AA   }}
         {% endif %}
         <form action="." method="POST">
             {% csrf_token %}

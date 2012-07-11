@@ -27,6 +27,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL, compatible_scope
 
+FORMAT_SPECIAL = 'svg-js'
+
 
 class DetectCyclicForm(forms.Form):
 
@@ -47,7 +49,8 @@ class DetectCyclicForm(forms.Form):
                          help_text=_('Choose the applications to analize'))
     file_name = forms.CharField(label=_('File name'),
                          initial=DEFAULT_FILENAME,
-                         help_text=_('Choose a name to the generated file (without extension)'))
+                         help_text=_('Choose a name to the generated file (without extension)'),
+                         required=False)
     format = forms.ChoiceField(label=_('Format'), initial='svg')
     exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
                        help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
@@ -74,8 +77,8 @@ class DetectCyclicForm(forms.Form):
             self.fields['exclude_packages'].initial = 'migrations'
         dot = pydot.Dot()
         formats = [(format, format) for format in dot.formats]
-        formats.append(('svg-js', 'svg-js'))
-        self.fields['format'].choices = [(format, format) for format in dot.formats]
+        formats.append((FORMAT_SPECIAL, FORMAT_SPECIAL))
+        self.fields['format'].choices = formats
         applications_label = self.fields['applications'].label
         applications_choices = self.fields['applications'].choices
         applications_initial = [app_value for app_label, app_value in applications_choices
@@ -93,19 +96,25 @@ class DetectCyclicForm(forms.Form):
         dotted_scope_local = cleaned_data['dotted_scope_local']
         scope_global = cleaned_data['scope_global']
         if not compatible_scope(dotted_scope_local, scope_global):
-            scope_global = self._errors.get('scope_global', ErrorList())
-            scope_global.append(_('This option is incompatible with dotted scope local'))
-            self._errors['scope_global'] = scope_global
+            scope_global_errors = self._errors.get('scope_global', ErrorList())
+            scope_global_errors.append(_('This option is incompatible with dotted scope local'))
+            self._errors['scope_global'] = scope_global_errors
+        format = cleaned_data['format']
+        file_name = cleaned_data['file_name']
+        if format != FORMAT_SPECIAL and not file_name:
+            file_name_errors = self._errors.get('file_name', ErrorList())
+            file_name_errors.append(_('This field is required.'))
+            self._errors['file_name'] = file_name_errors
+        elif format == FORMAT_SPECIAL:
+            cleaned_data['file_name'] = None
         return cleaned_data
 
     def detect_cyclic(self):
-        file_name = str(os.path.join(settings.MEDIA_ROOT,
-                        '%s.%s' % (self.cleaned_data['file_name'], self.cleaned_data['format'])))
         applications = self.cleaned_data['applications']
         exclude_packages = self.cleaned_data['exclude_packages']
+        verbosity = 1
         if settings.DEBUG:
             verbosity = 2
-        verbosity = 1
         show_modules = self.cleaned_data['show_modules']
         remove_isolate_nodes = self.cleaned_data['remove_isolate_nodes']
         remove_sink_nodes = self.cleaned_data['remove_sink_nodes']
@@ -117,16 +126,22 @@ class DetectCyclicForm(forms.Form):
             scope = SCOPE_GLOBAL
         force_colors = self.cleaned_data['force_colors']
         dotted_scope_local = self.cleaned_data['dotted_scope_local']
-        create_graph_apps_dependence(file_name=file_name, include_apps=applications,
-                                     exclude_apps=None, exclude_packages=exclude_packages,
-                                     verbosity=verbosity, show_modules=show_modules,
-                                     remove_isolate_nodes=remove_isolate_nodes,
-                                     remove_sink_nodes=remove_sink_nodes,
-                                     remove_source_nodes=remove_source_nodes,
-                                     only_cyclic=only_cyclic, scope=scope,
-                                     force_colors=force_colors,
-                                     dotted_scope_local=dotted_scope_local)
-        return file_name
+        file_name = self.cleaned_data['file_name']
+        if file_name:
+            file_name = str(os.path.join(settings.MEDIA_ROOT,
+                            '%s.%s' % (file_name, self.cleaned_data['format'])))
+        else:
+            force_colors = True
+        gr = create_graph_apps_dependence(file_name=file_name, include_apps=applications,
+                                        exclude_apps=None, exclude_packages=exclude_packages,
+                                        verbosity=verbosity, show_modules=show_modules,
+                                        remove_isolate_nodes=remove_isolate_nodes,
+                                        remove_sink_nodes=remove_sink_nodes,
+                                        remove_source_nodes=remove_source_nodes,
+                                        only_cyclic=only_cyclic, scope=scope,
+                                        force_colors=force_colors,
+                                        dotted_scope_local=dotted_scope_local)
+        return (gr, file_name)
 
     def __unicode__(self):
         try:

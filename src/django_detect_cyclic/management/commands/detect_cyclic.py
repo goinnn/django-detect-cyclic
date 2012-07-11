@@ -63,8 +63,6 @@ class Command(BaseCommand):
         remove_sink_nodes = options['remove_sink_nodes']
         remove_source_nodes = options['remove_source_nodes']
         only_cyclic = options['only_cyclic']
-        if only_cyclic:
-            remove_isolate_nodes = True
         show_modules = options['show_modules']
         file_name = options['file_name']
         force_colors = options['force_colors']

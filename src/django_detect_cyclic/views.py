@@ -29,17 +29,21 @@ from django_detect_cyclic.forms import DetectCyclicForm
 def detect_cyclic(request):
     data = None
     img_src = None
+    gr = None
     if request.method == 'POST':
         data = request.POST
     form = DetectCyclicForm(data=data)
     if form.is_valid():
-        file_path = form.detect_cyclic()
-        img_src = file_path.replace(settings.MEDIA_ROOT, '')
-        if img_src and img_src[0] == '/':
-            img_src = img_src[1:]
-        img_src = os.path.join(settings.MEDIA_URL, img_src)
+        gr, file_path = form.detect_cyclic()
+        gr = gr.edges()
+        if file_path:
+            img_src = file_path.replace(settings.MEDIA_ROOT, '')
+            if img_src and img_src[0] == '/':
+                img_src = img_src[1:]
+            img_src = os.path.join(settings.MEDIA_URL, img_src)
     return render_to_response('detect_cyclic/detect_cyclic.html',
                               {'form': form,
                                'title': _('Detect cyclic'),
-                               'img_src': img_src},
+                               'img_src': img_src,
+                               'gr': gr},
                               context_instance=RequestContext(request))
