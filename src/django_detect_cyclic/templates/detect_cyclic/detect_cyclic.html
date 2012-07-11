@@ -21,6 +21,10 @@
 {% endblock %}
 
 {% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="../">{% trans "Home" %}</a> &rsaquo;
+        {{ title }}
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -34,7 +38,7 @@
         <form action="." method="POST">
             {% csrf_token %}
             {{ form }}
-            <div>
+            <div class="submit-row">
                 <input type="submit" name="submit" value="{% trans "Create Graph" %}"/>
             </div>
         </form>

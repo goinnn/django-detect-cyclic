@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-11 12:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: forms.py:33
+msgid "Basic options"
+msgstr "Opciones básicas"
+
+#: forms.py:36
+msgid "Advanced options"
+msgstr "Opciones avanzadas"
+
+#: forms.py:39
+msgid "Limits the graph"
+msgstr "Limita el grafo"
+
+#: forms.py:44
+msgid "Applications"
+msgstr "Aplicaciones"
+
+#: forms.py:46
+msgid "Choose the applications to analize"
+msgstr "Elige las aplicaciones a analizar"
+
+#: forms.py:47
+msgid "File name"
+msgstr "Nombre del fichero"
+
+#: forms.py:49
+msgid "Choose a name to the generated file (without extension)"
+msgstr "Elige un nombre para el archivo generado (sin extensión)"
+
+#: forms.py:50
+msgid "Format"
+msgstr "Formato"
+
+#: forms.py:51
+msgid "Exclude packages"
+msgstr "Excluye paquetes"
+
+#: forms.py:52
+msgid ""
+"Exclude the next packages. For example migrations,templatetags (separated by "
+"commas)"
+msgstr ""
+"Excluye los siguientes paquetes. Por ejemplo: migrations,templatetags "
+"(separados por comas)"
+
+#: forms.py:53
+msgid "Force colors"
+msgstr "Fuerza colores"
+
+#: forms.py:54
+msgid ""
+"By default only if you choose svg format the result image will be colored. "
+"If you check this option the result image will be colored"
+msgstr ""
+"Por defecto solo si tu eliges formato svg el resultado de la imagen estará "
+"colorada. Si tu seleccionas esta opción la imagen resultante será coloreada"
+
+#: forms.py:55
+msgid "Scope global"
+msgstr "Ambito global"
+
+#: forms.py:56
+msgid "The imports into the functions are ignored"
+msgstr "Los \"imports\" de dentro de las funciones son ignorados"
+
+#: forms.py:57
+msgid "Dotted scope local"
+msgstr "Punteado ambito local"
+
+#: forms.py:58
+msgid "The imports into the functions are printing with dotted line"
+msgstr ""
+"Los \"imports\" de dentro de las funciones están pintados con línea punteada"
+
+#: forms.py:59
+msgid "Show modules"
+msgstr "Muestra los modulos"
+
+#: forms.py:60
+msgid "The nodes now are the modules (by default are the applications)"
+msgstr "Los nodos ahora son los modulos (por defecto son las aplicaciones)"
+
+#: forms.py:61
+msgid "Only cyclic"
+msgstr "Solo ciclos"
+
+#: forms.py:62
+msgid "Removes the nodes that do not belong to any cycle"
+msgstr "Elimina los nodos que no pertenecen a ningun ciclo"
+
+#: forms.py:63
+msgid "Removes isolate nodes"
+msgstr "Elimina los nodos aislados"
+
+#: forms.py:64
+msgid "Removes the isolate nodes (without edgeds)"
+msgstr "Elimina los nodos aislados (sin aristas)"
+
+#: forms.py:65
+msgid "Removes sink nodes"
+msgstr "Elimina los nodos sumidero"
+
+#: forms.py:66
+msgid "Removes the sink nodes (without output edges)"
+msgstr "Elimina los nodos sumidero (sin aristas de salida)"
+
+#: forms.py:67
+msgid "Removes source nodes"
+msgstr "Elimina los nodos fuente"
+
+#: forms.py:68
+msgid "Removes the source nodes (without input edges)"
+msgstr "Elimina los nodos fuente (sin aristas de entrada)"
+
+#: views.py:43
+msgid "Detect cyclic"
+msgstr "Detecta ciclos"
+
+#: templates/detect_cyclic/detect_cyclic.html:31
+msgid "Download"
+msgstr "Descargar"
+
+#: templates/detect_cyclic/detect_cyclic.html:38
+msgid "Create Graph"
+msgstr "Crear Grafo"

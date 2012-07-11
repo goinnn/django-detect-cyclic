@@ -30,13 +30,13 @@ from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL
 class DetectCyclicForm(forms.Form):
 
     fieldsets = (
-                    ('Basic options', {
+                    (_('Basic options'), {
                         'fields': ('applications', 'file_name', 'format')
                     }),
-                    ('Advanced options', {
+                    (_('Advanced options'), {
                         'fields': ('exclude_packages', 'force_colors', 'scope_global', 'dotted_scope_local', 'show_modules'),
                     }),
-                    ('Limit nodes', {
+                    (_('Limits the graph'), {
                         'fields': ('only_cyclic', 'remove_isolate_nodes', 'remove_sink_nodes', 'remove_source_nodes'),
                     }),
                 )
@@ -57,14 +57,14 @@ class DetectCyclicForm(forms.Form):
     dotted_scope_local = forms.BooleanField(label=_('Dotted scope local'), initial=True, required=False,
         help_text=_('The imports into the functions are printing with dotted line'))
     show_modules = forms.BooleanField(label=_('Show modules'), required=False,
-        help_text=_('The nodes now are the modules (by default are the applications'))
+        help_text=_('The nodes now are the modules (by default are the applications)'))
     only_cyclic = forms.BooleanField(label=_('Only cyclic'), initial=True, required=False,
        help_text=_('Removes the nodes that do not belong to any cycle'))
-    remove_isolate_nodes = forms.BooleanField(label=_('Remove isolate nodes'), required=False,
+    remove_isolate_nodes = forms.BooleanField(label=_('Removes isolate nodes'), required=False,
         help_text=_('Removes the isolate nodes (without edgeds)'))
-    remove_sink_nodes = forms.BooleanField(label=_('Remove sink nodes'), required=False,
+    remove_sink_nodes = forms.BooleanField(label=_('Removes sink nodes'), required=False,
         help_text=_('Removes the sink nodes (without output edges)'))
-    remove_source_nodes = forms.BooleanField(label=_('Remove source nodes'), required=False,
+    remove_source_nodes = forms.BooleanField(label=_('Removes source nodes'), required=False,
         help_text=_('Removes the source nodes (without input edges)'))
 
     def __init__(self, *args, **kwargs):

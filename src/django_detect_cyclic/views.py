@@ -20,6 +20,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.translation import ugettext as _
 
 from django_detect_cyclic.forms import DetectCyclicForm
 
@@ -39,6 +40,6 @@ def detect_cyclic(request):
         img_src = os.path.join(settings.MEDIA_URL, img_src)
     return render_to_response('detect_cyclic/detect_cyclic.html',
                               {'form': form,
-                               'title': 'Detect cyclic',
+                               'title': _('Detect cyclic'),
                                'img_src': img_src},
                               context_instance=RequestContext(request))
