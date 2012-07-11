@@ -21,6 +21,7 @@ from django import forms
 from django.contrib.admin import widgets as widgets_admin
 from django.conf import settings
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
 
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL
@@ -33,25 +34,38 @@ class DetectCyclicForm(forms.Form):
                         'fields': ('applications', 'file_name', 'format')
                     }),
                     ('Advanced options', {
-                        'fields': ('exclude_packages', 'force_colors', 'scope_global', 'dotted_scope_local')
+                        'fields': ('exclude_packages', 'force_colors', 'scope_global', 'dotted_scope_local', 'show_modules'),
                     }),
                     ('Limit nodes', {
-                        'fields': ('only_cyclic', 'remove_isolate_nodes', 'remove_sink_nodes', 'remove_source_nodes')
+                        'fields': ('only_cyclic', 'remove_isolate_nodes', 'remove_sink_nodes', 'remove_source_nodes'),
                     }),
                 )
 
-    applications = forms.MultipleChoiceField(label='Applications', choices=[(app, app) for app in settings.INSTALLED_APPS])
-    file_name = forms.CharField(initial=DEFAULT_FILENAME)
-    format = forms.ChoiceField(initial='svg')
-    exclude_packages = forms.CharField(required=False)
-    force_colors = forms.BooleanField(required=False)
-    scope_global = forms.BooleanField(required=False)
-    dotted_scope_local = forms.BooleanField(initial=True, required=False)
-    only_cyclic = forms.BooleanField(initial=True, required=False)
-    show_modules = forms.BooleanField(required=False)
-    remove_isolate_nodes = forms.BooleanField(required=False)
-    remove_sink_nodes = forms.BooleanField(required=False)
-    remove_source_nodes = forms.BooleanField(required=False)
+    applications = forms.MultipleChoiceField(label=_('Applications'),
+                         choices=[(app, app) for app in settings.INSTALLED_APPS],
+                         help_text=_('Choose the applications to analize'))
+    file_name = forms.CharField(label=_('File name'),
+                         initial=DEFAULT_FILENAME,
+                         help_text=_('Choose a name to the generated file (without extension)'))
+    format = forms.ChoiceField(label=_('Format'), initial='svg')
+    exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
+                       help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
+    force_colors = forms.BooleanField(label=_('Force colors'), required=False,
+        help_text=_('By default only if you choose svg format the result image will be colored. If you check this option the result image will be colored'))
+    scope_global = forms.BooleanField(label=_('Scope global'), required=False,
+        help_text=_('The imports into the functions are ignored'))
+    dotted_scope_local = forms.BooleanField(label=_('Dotted scope local'), initial=True, required=False,
+        help_text=_('The imports into the functions are printing with dotted line'))
+    show_modules = forms.BooleanField(label=_('Show modules'), required=False,
+        help_text=_('The nodes now are the modules (by default are the applications'))
+    only_cyclic = forms.BooleanField(label=_('Only cyclic'), initial=True, required=False,
+       help_text=_('Removes the nodes that do not belong to any cycle'))
+    remove_isolate_nodes = forms.BooleanField(label=_('Remove isolate nodes'), required=False,
+        help_text=_('Removes the isolate nodes (without edgeds)'))
+    remove_sink_nodes = forms.BooleanField(label=_('Remove sink nodes'), required=False,
+        help_text=_('Removes the sink nodes (without output edges)'))
+    remove_source_nodes = forms.BooleanField(label=_('Remove source nodes'), required=False,
+        help_text=_('Removes the source nodes (without input edges)'))
 
     def __init__(self, *args, **kwargs):
         super(DetectCyclicForm, self).__init__(*args, **kwargs)
@@ -66,7 +80,9 @@ class DetectCyclicForm(forms.Form):
         applications_initial = [app_value for app_label, app_value in applications_choices
                                               if not app_value.startswith('django.') and app_value != 'django_detect_cyclic']
         self.fields['applications'].initial = applications_initial
-        self.fields['applications'].widget = widgets_admin.FilteredSelectMultiple(applications_label, False, choices=applications_choices)
+        self.fields['applications'].widget = widgets_admin.FilteredSelectMultiple(applications_label,
+                                                                                  is_stacked=False,
+                                                                                  choices=applications_choices)
 
     def clean_file_name(self):
         return str(slugify(self.cleaned_data['file_name']))
