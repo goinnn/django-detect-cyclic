@@ -1,5 +1,7 @@
 include README.rst
 include AUTHORS
 include CHANGES
-include *.py
-recursive-include django_detect_cyclic/templates *
+recursive-include src/django_detect_cyclic/*.py
+recursive-include src/django_detect_cyclic/templates *
+recursive-include src/django_detect_cyclic/static *
+recursive-include src/django_detect_cyclic/locale *
