@@ -13,98 +13,98 @@
 <polygon style="fill:white;stroke:white;" points="-4,4 -4,-490 596,-490 596,4 -4,4"/>
 <!-- wfadaptor.tasktypes -->
 <g id="node1" class="node"><title>wfadaptor.tasktypes</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="211" cy="-468" rx="107.902" ry="18"/>
-<text text-anchor="middle" x="211" y="-463.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.tasktypes</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="211" cy="-468" rx="107.902" ry="18"/>
+<text text-anchor="middle" x="211" y="-463.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.tasktypes</text>
 </g>
 <!-- wfadaptor.forms -->
 <g id="node3" class="node"><title>wfadaptor.forms</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="131" cy="-378" rx="88.9449" ry="18"/>
-<text text-anchor="middle" x="131" y="-373.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.forms</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="131" cy="-378" rx="88.9449" ry="18"/>
+<text text-anchor="middle" x="131" y="-373.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.forms</text>
 </g>
 <!-- wfadaptor.tasktypes&#45;&gt;wfadaptor.forms -->
 <g id="edge2" class="edge"><title>wfadaptor.tasktypes&#45;&gt;wfadaptor.forms</title>
-<path style="fill:none;stroke:#002f5b;stroke-dasharray:1,5;" d="M187,-450C181,-445 174,-438 168,-432 160,-424 153,-414 147,-404"/>
-<polygon style="fill:#002f5b;stroke:#002f5b;" points="150.268,-402.625 142,-396 144.332,-406.335 150.268,-402.625"/>
-<text text-anchor="middle" x="205" y="-418.9" style="font-family:Times New Roman;font-size:14.00;fill:#002f5b;">Cycle 1 (1)</text>
+<path style="fill:none;stroke:#2f5bc6;stroke-dasharray:1,5;" d="M187,-450C181,-445 174,-438 168,-432 160,-424 153,-414 147,-404"/>
+<polygon style="fill:#2f5bc6;stroke:#2f5bc6;" points="150.268,-402.625 142,-396 144.332,-406.335 150.268,-402.625"/>
+<text text-anchor="middle" x="205" y="-418.9" style="font-family:Times New Roman;font-size:14.00;fill:#2f5bc6;">Cycle 1 (1)</text>
 </g>
 <!-- wfadaptor.managers -->
 <g id="node2" class="node"><title>wfadaptor.managers</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="109" cy="-18" rx="109.097" ry="18"/>
-<text text-anchor="middle" x="109" y="-13.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.managers</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="109" cy="-18" rx="109.097" ry="18"/>
+<text text-anchor="middle" x="109" y="-13.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.managers</text>
 </g>
 <!-- wfadaptor.utils -->
 <g id="node7" class="node"><title>wfadaptor.utils</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="202" cy="-288" rx="82.1898" ry="18"/>
-<text text-anchor="middle" x="202" y="-283.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.utils</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="202" cy="-288" rx="82.1898" ry="18"/>
+<text text-anchor="middle" x="202" y="-283.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.utils</text>
 </g>
 <!-- wfadaptor.managers&#45;&gt;wfadaptor.utils -->
 <g id="edge4" class="edge"><title>wfadaptor.managers&#45;&gt;wfadaptor.utils</title>
-<path style="fill:none;stroke:#009c82;stroke-dasharray:1,5;" d="M101,-36C91,-64 75,-119 90,-162 105,-204 143,-241 170,-264"/>
-<polygon style="fill:#009c82;stroke:#009c82;" points="168.169,-267.049 178,-271 172.779,-261.781 168.169,-267.049"/>
-<text text-anchor="middle" x="130" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#009c82;">Cycle 3 (1)</text>
+<path style="fill:none;stroke:#9c8298;stroke-dasharray:1,5;" d="M101,-36C91,-64 75,-119 90,-162 105,-204 143,-241 170,-264"/>
+<polygon style="fill:#9c8298;stroke:#9c8298;" points="168.169,-267.049 178,-271 172.779,-261.781 168.169,-267.049"/>
+<text text-anchor="middle" x="130" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#9c8298;">Cycle 3 (1)</text>
 </g>
 <!-- wfadaptor.forms&#45;&gt;wfadaptor.utils -->
 <g id="edge6" class="edge"><title>wfadaptor.forms&#45;&gt;wfadaptor.utils</title>
-<path style="fill:none;stroke:#002f5b;stroke-dasharray:1,5;" d="M142,-360C149,-349 159,-335 168,-324 171,-321 173,-317 176,-314"/>
-<polygon style="fill:#002f5b;stroke:#002f5b;" points="179.049,-315.831 183,-306 173.781,-311.221 179.049,-315.831"/>
-<text text-anchor="middle" x="205" y="-328.9" style="font-family:Times New Roman;font-size:14.00;fill:#002f5b;">Cycle 1 (1)</text>
+<path style="fill:none;stroke:#2f5bc6;stroke-dasharray:1,5;" d="M142,-360C149,-349 159,-335 168,-324 171,-321 173,-317 176,-314"/>
+<polygon style="fill:#2f5bc6;stroke:#2f5bc6;" points="179.049,-315.831 183,-306 173.781,-311.221 179.049,-315.831"/>
+<text text-anchor="middle" x="205" y="-328.9" style="font-family:Times New Roman;font-size:14.00;fill:#2f5bc6;">Cycle 1 (1)</text>
 </g>
 <!-- wfadaptor.models -->
 <g id="node4" class="node"><title>wfadaptor.models</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="214" cy="-108" rx="95.8938" ry="18"/>
-<text text-anchor="middle" x="214" y="-103.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.models</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="214" cy="-108" rx="95.8938" ry="18"/>
+<text text-anchor="middle" x="214" y="-103.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.models</text>
 </g>
 <!-- wfadaptor.models&#45;&gt;wfadaptor.managers -->
 <g id="edge10" class="edge"><title>wfadaptor.models&#45;&gt;wfadaptor.managers</title>
-<path style="fill:none;stroke:#009c82;" d="M193,-90C178,-76 155,-57 138,-43"/>
-<polygon style="fill:#009c82;stroke:#009c82;" points="139.831,-39.9511 130,-36 135.221,-45.2191 139.831,-39.9511"/>
-<text text-anchor="middle" x="207" y="-58.9" style="font-family:Times New Roman;font-size:14.00;fill:#009c82;">Cycle 3 (2)</text>
+<path style="fill:none;stroke:#9c8298;" d="M193,-90C178,-76 155,-57 138,-43"/>
+<polygon style="fill:#9c8298;stroke:#9c8298;" points="139.831,-39.9511 130,-36 135.221,-45.2191 139.831,-39.9511"/>
+<text text-anchor="middle" x="207" y="-58.9" style="font-family:Times New Roman;font-size:14.00;fill:#9c8298;">Cycle 3 (2)</text>
 </g>
 <!-- wfadaptor.models&#45;&gt;wfadaptor.utils -->
 <g id="edge8" class="edge"><title>wfadaptor.models&#45;&gt;wfadaptor.utils</title>
-<path style="fill:none;stroke:#0065ef;stroke-dasharray:1,5;" d="M196,-126C183,-139 168,-159 161,-180 151,-208 167,-240 181,-262"/>
-<polygon style="fill:#0065ef;stroke:#0065ef;" points="178.2,-264.1 187,-270 183.8,-259.9 178.2,-264.1"/>
-<text text-anchor="middle" x="199" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#0065ef;">Cycle 2 (1)</text>
+<path style="fill:none;stroke:#65ef2f;stroke-dasharray:1,5;" d="M196,-126C183,-139 168,-159 161,-180 151,-208 167,-240 181,-262"/>
+<polygon style="fill:#65ef2f;stroke:#65ef2f;" points="178.2,-264.1 187,-270 183.8,-259.9 178.2,-264.1"/>
+<text text-anchor="middle" x="199" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#65ef2f;">Cycle 2 (1)</text>
 </g>
 <!-- bpmui.models -->
 <g id="node5" class="node"><title>bpmui.models</title>
-<ellipse style="fill:#00cedd;stroke:#004edd;" cx="321" cy="-198" rx="77.1319" ry="18"/>
-<text text-anchor="middle" x="321" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#004edd;">bpmui.models</text>
+<ellipse style="fill:#ceddb4;stroke:#4eddb5;" cx="321" cy="-198" rx="77.1319" ry="18"/>
+<text text-anchor="middle" x="321" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#4eddb5;">bpmui.models</text>
 </g>
 <!-- bpmui.models&#45;&gt;wfadaptor.models -->
 <g id="edge12" class="edge"><title>bpmui.models&#45;&gt;wfadaptor.models</title>
-<path style="fill:none;stroke:#009c82;" d="M300,-181C284,-167 261,-148 243,-133"/>
-<polygon style="fill:#009c82;stroke:#009c82;" points="244.831,-129.951 235,-126 240.221,-135.219 244.831,-129.951"/>
-<text text-anchor="middle" x="313" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#009c82;">Cycle 3 (2)</text>
+<path style="fill:none;stroke:#9c8298;" d="M300,-181C284,-167 261,-148 243,-133"/>
+<polygon style="fill:#9c8298;stroke:#9c8298;" points="244.831,-129.951 235,-126 240.221,-135.219 244.831,-129.951"/>
+<text text-anchor="middle" x="313" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#9c8298;">Cycle 3 (2)</text>
 </g>
 <!-- wfadaptor.wfapi -->
 <g id="node6" class="node"><title>wfadaptor.wfapi</title>
-<ellipse style="fill:#0065d6;stroke:#001a29;" cx="504" cy="-198" rx="87.7515" ry="18"/>
-<text text-anchor="middle" x="504" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#001a29;">wfadaptor.wfapi</text>
+<ellipse style="fill:#65d683;stroke:#1a297c;" cx="504" cy="-198" rx="87.7515" ry="18"/>
+<text text-anchor="middle" x="504" y="-193.9" style="font-family:Times New Roman;font-size:14.00;fill:#1a297c;">wfadaptor.wfapi</text>
 </g>
 <!-- wfadaptor.wfapi&#45;&gt;wfadaptor.models -->
 <g id="edge14" class="edge"><title>wfadaptor.wfapi&#45;&gt;wfadaptor.models</title>
-<path style="fill:none;stroke:#0065ef;" d="M463,-182C433,-170 391,-155 354,-144 331,-137 306,-130 284,-124"/>
-<polygon style="fill:#0065ef;stroke:#0065ef;" points="284.492,-120.529 274,-122 283.119,-127.393 284.492,-120.529"/>
-<text text-anchor="middle" x="448" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#0065ef;">Cycle 2 (2)</text>
+<path style="fill:none;stroke:#65ef2f;" d="M463,-182C433,-170 391,-155 354,-144 331,-137 306,-130 284,-124"/>
+<polygon style="fill:#65ef2f;stroke:#65ef2f;" points="284.492,-120.529 274,-122 283.119,-127.393 284.492,-120.529"/>
+<text text-anchor="middle" x="448" y="-148.9" style="font-family:Times New Roman;font-size:14.00;fill:#65ef2f;">Cycle 2 (2)</text>
 </g>
 <!-- wfadaptor.utils&#45;&gt;wfadaptor.tasktypes -->
 <g id="edge16" class="edge"><title>wfadaptor.utils&#45;&gt;wfadaptor.tasktypes</title>
-<path style="fill:none;stroke:#002f5b;stroke-dasharray:1,5;" d="M227,-305C233,-310 239,-317 242,-324 261,-367 258,-387 242,-432 240,-436 239,-439 237,-442"/>
-<polygon style="fill:#002f5b;stroke:#002f5b;" points="233.951,-440.169 230,-450 239.219,-444.779 233.951,-440.169"/>
-<text text-anchor="middle" x="291" y="-373.9" style="font-family:Times New Roman;font-size:14.00;fill:#002f5b;">Cycle 1 (2)</text>
+<path style="fill:none;stroke:#2f5bc6;stroke-dasharray:1,5;" d="M227,-305C233,-310 239,-317 242,-324 261,-367 258,-387 242,-432 240,-436 239,-439 237,-442"/>
+<polygon style="fill:#2f5bc6;stroke:#2f5bc6;" points="233.951,-440.169 230,-450 239.219,-444.779 233.951,-440.169"/>
+<text text-anchor="middle" x="291" y="-373.9" style="font-family:Times New Roman;font-size:14.00;fill:#2f5bc6;">Cycle 1 (2)</text>
 </g>
 <!-- wfadaptor.utils&#45;&gt;bpmui.models -->
 <g id="edge20" class="edge"><title>wfadaptor.utils&#45;&gt;bpmui.models</title>
-<path style="fill:none;stroke:#009c82;" d="M225,-271C243,-257 270,-237 290,-221"/>
-<polygon style="fill:#009c82;stroke:#009c82;" points="292.1,-223.8 298,-215 287.9,-218.2 292.1,-223.8"/>
-<text text-anchor="middle" x="308" y="-238.9" style="font-family:Times New Roman;font-size:14.00;fill:#009c82;">Cycle 3 (1)</text>
+<path style="fill:none;stroke:#9c8298;" d="M225,-271C243,-257 270,-237 290,-221"/>
+<polygon style="fill:#9c8298;stroke:#9c8298;" points="292.1,-223.8 298,-215 287.9,-218.2 292.1,-223.8"/>
+<text text-anchor="middle" x="308" y="-238.9" style="font-family:Times New Roman;font-size:14.00;fill:#9c8298;">Cycle 3 (1)</text>
 </g>
 <!-- wfadaptor.utils&#45;&gt;wfadaptor.wfapi -->
 <g id="edge18" class="edge"><title>wfadaptor.utils&#45;&gt;wfadaptor.wfapi</title>
-<path style="fill:none;stroke:#0065ef;" d="M260,-275C287,-269 320,-261 349,-252 383,-241 422,-228 452,-217"/>
-<polygon style="fill:#0065ef;stroke:#0065ef;" points="453.427,-220.226 462,-214 451.416,-213.521 453.427,-220.226"/>
-<text text-anchor="middle" x="436" y="-238.9" style="font-family:Times New Roman;font-size:14.00;fill:#0065ef;">Cycle 2 (1)</text>
+<path style="fill:none;stroke:#65ef2f;" d="M260,-275C287,-269 320,-261 349,-252 383,-241 422,-228 452,-217"/>
+<polygon style="fill:#65ef2f;stroke:#65ef2f;" points="453.427,-220.226 462,-214 451.416,-213.521 453.427,-220.226"/>
+<text text-anchor="middle" x="436" y="-238.9" style="font-family:Times New Roman;font-size:14.00;fill:#65ef2f;">Cycle 2 (1)</text>
 </g>
 </g>
 </svg>
