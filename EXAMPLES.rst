@@ -82,23 +82,25 @@ We can use scope-global to see only the global imports.
         -e EXCLUDE_APPS, --exclude-apps=EXCLUDE_APPS
                                 Exclude these apps to the graph (separated by commas)
         -f FILE_NAME, --file-name=FILE_NAME
-                                Exclude these apps to the graph (separated by commas)
+                                The name to the generated path (you can set with path)
         -p EXCLUDE_PACKAGES, --exclude-packages=EXCLUDE_PACKAGES
                                 Exclude the next packages. For example
                                 migrations,templatetags (separated by commas)
-        -r, --remove-isolate-nodes
-                                Remove the isolate nodes
-        -k, --remove-sink-nodes
-                                Remove the sink nodes
-        -a, --remove-source-nodes
-                                Remove the source nodes
-        -o, --only-cyclic     Remove the nodes without cyclic
-        -s, --show-modules    The nodes now are the modules (by default are the
-                                applications)
-        -g, --scope-global    The imports into the functions are ignored
         -c, --force-colors    You can use this option when the format are not svg
+        -g, --scope-global    The imports into the functions are ignored
         -d, --dotted-scope-local
                                 The imports into the functions are printing with
                                 dotted line
+        -s, --show-modules    The nodes now are the modules (by default are the
+                                applications)
+        -o, --only-cyclic     Removes the nodes that do not belong to any cycle
+        -r, --remove-isolate-nodes
+                                Removes the isolate nodes
+        -k, --remove-sink-nodes
+                                Removes the sink nodes
+        -a, --remove-source-nodes
+                                Removes the source nodes
+        -l LAYOUT, --layout=LAYOUT
+                                Removes the source nodes
         --version             show program's version number and exit
         -h, --help            show this help message and exit
