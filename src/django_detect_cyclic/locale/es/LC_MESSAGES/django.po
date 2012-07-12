@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-12 12:05+0200\n"
+"POT-Creation-Date: 2012-07-12 16:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,8 +54,8 @@ msgid "Layout"
 msgstr "Disposición"
 
 #: forms.py:61
-msgid "Node layout"
-msgstr "Disposición de los nodos"
+msgid "Node layout. This does not work if you select format svg-js"
+msgstr "Disposición de los nodos. Este no funciona si tu seleccionas el formato svg-js"
 
 #: forms.py:62
 msgid "Exclude packages"
@@ -138,11 +138,11 @@ msgstr "Elimina los nodos fuente"
 msgid "Removes the source nodes (without input edges)"
 msgstr "Elimina los nodos fuente (sin aristas de entrada)"
 
-#: forms.py:110
+#: forms.py:111
 msgid "This option is incompatible with dotted scope local"
 msgstr "Esta opción es incompatible con punteado ambito local"
 
-#: forms.py:116
+#: forms.py:117
 msgid "This field is required."
 msgstr ""
 
@@ -150,18 +150,21 @@ msgstr ""
 msgid "Cycle"
 msgstr "Ciclo"
 
-#: views.py:48
+#: views.py:49
 msgid "Detect cyclic"
 msgstr "Detecta ciclos"
 
-#: templates/detect_cyclic/detect_cyclic.html:96
+#: templates/detect_cyclic/detect_cyclic.html:65
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:106
+#: templates/detect_cyclic/detect_cyclic.html:75
 msgid "Download"
 msgstr "Descargar"
 
-#: templates/detect_cyclic/detect_cyclic.html:114
+#: templates/detect_cyclic/detect_cyclic.html:85
 msgid "Create Graph"
 msgstr "Crear Grafo"
+
+#~ msgid "Node layout"
+#~ msgstr "Disposición de los nodos"

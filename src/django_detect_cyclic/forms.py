@@ -58,7 +58,7 @@ class DetectCyclicForm(forms.Form):
                          required=False)
     format = forms.ChoiceField(label=_('Format'), initial=DEFAULT_FORMAT)
     layout = forms.ChoiceField(label=_('Layout'), choices=LAYOUT_CHOICES, initial=DEFAULT_LAYOUT,
-                        help_text=_('Node layout'))
+                        help_text=_('Node layout. This does not work if you select format svg-js'))
     exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
                        help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
     force_colors = forms.BooleanField(label=_('Force colors'), required=False,
@@ -85,6 +85,7 @@ class DetectCyclicForm(forms.Form):
         dot = pydot.Dot()
         formats = [(format, format) for format in dot.formats]
         formats.append((FORMAT_SPECIAL, FORMAT_SPECIAL))
+        formats.sort()
         self.fields['format'].choices = formats
         applications_label = self.fields['applications'].label
         applications_choices = self.fields['applications'].choices

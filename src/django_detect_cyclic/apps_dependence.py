@@ -19,7 +19,7 @@ import logging
 
 from pygraph.classes.digraph import digraph
 
-from django_detect_cyclic.utils import PyPlete, SCOPE_GLOBAL
+from django_detect_cyclic.utils import PyPlete, SCOPE_GLOBAL, format_color
 
 from django_detect_cyclic.graph_utils import find_all_cycle, print_graph, treatment_final_graph
 from django_detect_cyclic.utils import get_applications, print_log_info, print_log_error
@@ -204,8 +204,8 @@ def _get_app_colors(app):
     for ch in app:
         color += ord(ch) * int('754321', 16)
     color = int(color % int('ffffff', 16))
-    fillcolor = '#%s' % hex(color)[2:]
-    fontcolor = '#%s' % hex(abs(color - int('7fffff', 16)))[2:]
+    fillcolor = format_color(hex(color))
+    fontcolor = format_color(hex(abs(color - int('7fffff', 16))))
     return (fillcolor, fontcolor)
 
 

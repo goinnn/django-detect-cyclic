@@ -9,10 +9,7 @@
     <script type="text/javascript" src="{{ jsi18nurl|default:"../../jsi18n/" }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
 
-    {% if not img_src and gr %}
-<!--         http://stackoverflow.com/questions/7034/graph-visualization-code-in-javascript -->
-        <!--         http://www.web-punk.com/2010/07/how-to-visualize-graphs-with-javascript-infovis-jsviz/ -->
-        <!--     https://github.com/strathausen/dracula/tarball/v0.0.3alpha5 -->
+    {% if gr %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/raphael-min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graffle.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graph.js"></script>
@@ -21,22 +18,24 @@
         (function($) {
             $(document).ready(function () {
                 var render = function(r, n) {
-                    console.log(n.label);
-                    console.log(n.label.length * 8);
+                    var width_node = n.label.length * 6;
+                    if (width_node < 100) {
+                        width_node = 100;
+                    }
                     var set = r.set().push(
                         /* custom objects go here */
-                        r.rect(n.point[0]-30, n.point[1]-13, 60, 44).attr({"fill": "#feb", r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
+                        r.rect(n.point[0] - width_node/2, n.point[1]-40, width_node, 100).attr({"fill": n.color, r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
                         r.text(n.point[0], n.point[1] + 10, (n.label || n.id)));
                     return set;
                 };
-
-                var redraw;
                 var container = "canvas";
-                var height = 300;
+                var height = 500;
                 var width = $("#"+container).width();
                 var g = new Graph();
-                {% for node in gr.nodes %}
-                    g.addNode("{{ node }}", {label: "{{ node }}", render: render});
+                {% for node, attrs in gr.nodes.items %}
+                    var attrs = {{ attrs|safe }};
+                    attrs["render"] = render;
+                    g.addNode("{{ node }}", attrs);
                 {% endfor %}
                 {% for edge, attrs in gr.edges.items %}
                     g.addEdge("{{ edge.0 }}", "{{ edge.1 }}", {{ attrs|safe }});
@@ -76,7 +75,7 @@
                 <a href="{{ img_src }}" target="_blank">{% trans "Download" %}</a>
             </p>
         {% endif %}
-        {% if not img_src and gr %}
+        {% if gr %}
             <div id="canvas"></div>
         {% endif %}
         <form action="." method="POST">

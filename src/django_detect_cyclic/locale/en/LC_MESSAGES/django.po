@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-12 12:05+0200\n"
+"POT-Creation-Date: 2012-07-12 16:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgid "Layout"
 msgstr ""
 
 #: forms.py:61
-msgid "Node layout"
+msgid "Node layout. This does not work if you select format svg-js"
 msgstr ""
 
 #: forms.py:62
@@ -132,11 +132,11 @@ msgstr ""
 msgid "Removes the source nodes (without input edges)"
 msgstr ""
 
-#: forms.py:110
+#: forms.py:111
 msgid "This option is incompatible with dotted scope local"
 msgstr ""
 
-#: forms.py:116
+#: forms.py:117
 msgid "This field is required."
 msgstr ""
 
@@ -144,18 +144,18 @@ msgstr ""
 msgid "Cycle"
 msgstr ""
 
-#: views.py:48
+#: views.py:49
 msgid "Detect cyclic"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:96
+#: templates/detect_cyclic/detect_cyclic.html:65
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:106
+#: templates/detect_cyclic/detect_cyclic.html:75
 msgid "Download"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:114
+#: templates/detect_cyclic/detect_cyclic.html:85
 msgid "Create Graph"
 msgstr ""

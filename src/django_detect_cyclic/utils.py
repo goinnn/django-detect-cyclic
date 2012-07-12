@@ -89,3 +89,12 @@ def compatible_scope(dotted_scope_local, scope_global):
     if dotted_scope_local and scope_global:
         return False
     return True
+
+
+def format_color(number_hex):
+    if number_hex.startswith('0x'):
+        number_hex = number_hex[2:]
+    if len(number_hex) < 6:
+        zeros = '0' * (6 - len(number_hex))
+        number_hex = '%s%s' % (zeros, number_hex)
+    return '#%s' % number_hex

@@ -33,7 +33,7 @@ from pygraph.readwrite.dot import write
 
 from django.utils.translation import ugettext_lazy as _
 
-from django_detect_cyclic.utils import print_log_info
+from django_detect_cyclic.utils import print_log_info, format_color
 
 CYCLE_COLOR_SEED = "f8c85c"
 CYCLE_LABEL = _('Cycle')
@@ -103,6 +103,7 @@ def find_all_cycle(gr, gr_copy=None, use_colors=True, number_cycle=1):
 
 def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
     i = 0
+    cycle_color = None
     while i < len(cycle):
         item = cycle[i]
         try:
@@ -114,7 +115,8 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
         gr_copy.del_edge((item, next_item))
         i += 1
         if use_colors:
-            cycle_color = '#%s' % hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))[2:]
+            if not cycle_color:
+                cycle_color = format_color(hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16)))
             gr.add_edge_attribute((item, next_item), ("color", cycle_color))
             gr.add_edge_attribute((item, next_item), ("fontcolor", cycle_color))
 
