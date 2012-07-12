@@ -140,7 +140,10 @@ class DetectCyclicForm(forms.Form):
         dotted_scope_local = self.cleaned_data['dotted_scope_local']
         file_name = self.cleaned_data['file_name']
         if file_name:
-            file_name = str(os.path.join(settings.MEDIA_ROOT,
+            graph_dir = os.path.join(settings.MEDIA_ROOT, 'graph')
+            if not os.path.isdir(graph_dir):
+                os.mkdir(graph_dir)
+            file_name = str(os.path.join(graph_dir,
                             '%s.%s' % (file_name, self.cleaned_data['format'])))
         else:
             force_colors = True
