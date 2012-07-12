@@ -59,6 +59,11 @@ Also I want to know what import is into a function and what import is a global i
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-modules-dotted.png
 
+
+Now you can to do the same from admin site:
+
+.. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/wizard.png
+
 We can use other options, instead of only-cyclic we could use remove-isolate-nodes, remove-source-nodes or remove-sink-nodes to limit the graph.
 We can use scope-global to see only the global imports.
 
