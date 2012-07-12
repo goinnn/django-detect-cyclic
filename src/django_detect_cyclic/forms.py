@@ -25,16 +25,21 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
-from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL, compatible_scope
+from django_detect_cyclic.utils import DEFAULT_FILENAME, SCOPE_GLOBAL, DEFAULT_FORMAT, DEFAULT_LAYOUT, compatible_scope
 
 FORMAT_SPECIAL = 'svg-js'
+LAYOUT_CHOICES = (('circo', 'circo'),
+                  ('dot', 'dot'),
+                  ('fdp', 'fdp'),
+                  ('neato', 'neato'),
+                  ('twopi', 'twopi'))
 
 
 class DetectCyclicForm(forms.Form):
 
     fieldsets = (
                     (_('Basic options'), {
-                        'fields': ('applications', 'file_name', 'format')
+                        'fields': ('applications', 'file_name', 'format', 'layout')
                     }),
                     (_('Advanced options'), {
                         'fields': ('exclude_packages', 'force_colors', 'scope_global', 'dotted_scope_local', 'show_modules'),
@@ -51,7 +56,9 @@ class DetectCyclicForm(forms.Form):
                          initial=DEFAULT_FILENAME,
                          help_text=_('Choose a name to the generated file (without extension)'),
                          required=False)
-    format = forms.ChoiceField(label=_('Format'), initial='svg')
+    format = forms.ChoiceField(label=_('Format'), initial=DEFAULT_FORMAT)
+    layout = forms.ChoiceField(label=_('Layout'), choices=LAYOUT_CHOICES, initial=DEFAULT_LAYOUT,
+                        help_text=_('Node layout'))
     exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
                        help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
     force_colors = forms.BooleanField(label=_('Force colors'), required=False,
@@ -91,6 +98,9 @@ class DetectCyclicForm(forms.Form):
     def clean_file_name(self):
         return str(slugify(self.cleaned_data['file_name']))
 
+    def clean_layout(self):
+        return str(self.cleaned_data['layout'])
+
     def clean(self):
         cleaned_data = super(DetectCyclicForm, self).clean()
         dotted_scope_local = cleaned_data['dotted_scope_local']
@@ -121,6 +131,7 @@ class DetectCyclicForm(forms.Form):
         remove_source_nodes = self.cleaned_data['remove_source_nodes']
         only_cyclic = self.cleaned_data['only_cyclic']
         scope_global = self.cleaned_data['scope_global']
+        layout = self.cleaned_data['layout']
         scope = None
         if scope_global:
             scope = SCOPE_GLOBAL
@@ -140,7 +151,8 @@ class DetectCyclicForm(forms.Form):
                                         remove_source_nodes=remove_source_nodes,
                                         only_cyclic=only_cyclic, scope=scope,
                                         force_colors=force_colors,
-                                        dotted_scope_local=dotted_scope_local)
+                                        dotted_scope_local=dotted_scope_local,
+                                        layout=layout)
         return (gr, file_name)
 
     def __unicode__(self):

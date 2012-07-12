@@ -119,10 +119,9 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
             gr.add_edge_attribute((item, next_item), ("fontcolor", cycle_color))
 
 
-def print_graph(gr, file_path):
+def print_graph(gr, file_path, layout='dot'):
     dot = write(gr)
     gvv = gv.readstring(dot)
-    # circo, fdp, neato, dot, twopi
-    gv.layout(gvv, 'dot')
+    gv.layout(gvv, layout)
     format = file_path.split('.')[-1]
     gv.render(gvv, format, file_path)

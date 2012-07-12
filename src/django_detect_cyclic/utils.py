@@ -24,6 +24,8 @@ from pysmell.codefinder import CodeFinder, getName, getFuncArgs
 
 SCOPE_GLOBAL = 'global'
 DEFAULT_FILENAME = 'detect'
+DEFAULT_LAYOUT = 'dot'
+DEFAULT_FORMAT = 'svg'
 
 
 def get_applications(include=None, exclude=None):

@@ -18,7 +18,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django_detect_cyclic.apps_dependence import create_graph_apps_dependence
 from django_detect_cyclic.exceptions import InvalidOptions
-from django_detect_cyclic.utils import SCOPE_GLOBAL, DEFAULT_FILENAME, compatible_scope
+from django_detect_cyclic.utils import SCOPE_GLOBAL, DEFAULT_FILENAME, DEFAULT_LAYOUT, DEFAULT_FORMAT, compatible_scope
 
 
 class Command(BaseCommand):
@@ -28,7 +28,7 @@ class Command(BaseCommand):
                     help='Only use these applications to the graph (separated by commas)'),
             make_option('-e', '--exclude-apps', dest='exclude_apps',
                     help='Exclude these apps to the graph (separated by commas)'),
-            make_option('-f', '--file-name', dest='file_name', default='%s.svg' % DEFAULT_FILENAME,
+            make_option('-f', '--file-name', dest='file_name', default='%s.%s' % (DEFAULT_FILENAME, DEFAULT_FORMAT),
                     help='The name to the generated path (you can set with path)'),
             make_option('-p', '--exclude-packages', dest='exclude_packages',
                     help='Exclude the next packages. For example migrations,templatetags (separated by commas)'),
@@ -47,6 +47,8 @@ class Command(BaseCommand):
             make_option('-k', '--remove-sink-nodes', dest='remove_sink_nodes',  action="store_true",
                     help='Removes the sink nodes'),
             make_option('-a', '--remove-source-nodes', dest='remove_source_nodes',  action="store_true",
+                    help='Removes the source nodes'),
+            make_option('-l', '--layout', dest='layout', default=DEFAULT_LAYOUT,
                     help='Removes the source nodes'),
     )
 

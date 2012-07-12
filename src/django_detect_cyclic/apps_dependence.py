@@ -32,7 +32,8 @@ def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None
                                  exclude_packages=None, verbosity=1, show_modules=False,
                                  remove_isolate_nodes=False, remove_sink_nodes=False,
                                  remove_source_nodes=False, only_cyclic=False, scope=None,
-                                 force_colors=False, dotted_scope_local=False):
+                                 force_colors=False, dotted_scope_local=False,
+                                 layout='dot'):
     if only_cyclic:
         remove_isolate_nodes = True
     start_time = datetime.datetime.now()
@@ -42,7 +43,7 @@ def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None
     treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,
                               only_cyclic, verbosity=verbosity)
     if file_name:
-        print_graph(gr, file_name)
+        print_graph(gr, file_name, layout)
     if print_log_info(verbosity):
         log.info("Duration: %s" % str(datetime.datetime.now() - start_time))
     return gr
