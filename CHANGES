@@ -1,6 +1,12 @@
 Releases
 ========
 
+0.0.4 (2012-07-12)
+------------------
+
+ * Wizard to create graphs (/admin/detect_cyclic/)
+ * Format svg-js (beta)
+
 0.0.3 (2012-07-10)
 ------------------
 
