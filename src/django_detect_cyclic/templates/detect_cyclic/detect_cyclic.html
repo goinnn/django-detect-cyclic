@@ -8,7 +8,10 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
     <script type="text/javascript" src="{{ jsi18nurl|default:"../../jsi18n/" }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
+
     {% if not img_src and gr %}
+<!--         http://stackoverflow.com/questions/7034/graph-visualization-code-in-javascript -->
+        <!--         http://www.web-punk.com/2010/07/how-to-visualize-graphs-with-javascript-infovis-jsviz/ -->
         <!--     https://github.com/strathausen/dracula/tarball/v0.0.3alpha5 -->
         <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/raphael-min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graffle.js"></script>
@@ -17,16 +20,29 @@
         <script type="text/javascript">
         (function($) {
             $(document).ready(function () {
-                var redraw;
-                var height = 300;
-                var width = 400;
-                var g = new Graph();
-                {% for edge in gr %}
-                    console.log("{{ edge.0 }}" + "-->" + "{{ edge.1 }}");
-                    g.addEdge("{{ edge.0 }}", "{{ edge.1 }}", {label: "AAA"});
-                {% endfor %}
+                var render = function(r, n) {
+                    console.log(n.label);
+                    console.log(n.label.length * 8);
+                    var set = r.set().push(
+                        /* custom objects go here */
+                        r.rect(n.point[0]-30, n.point[1]-13, 60, 44).attr({"fill": "#feb", r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
+                        r.text(n.point[0], n.point[1] + 10, (n.label || n.id)));
+                    return set;
+                };
 
-                var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
+                var redraw;
+                var container = "canvas";
+                var height = 300;
+                var width = $("#"+container).width();
+                var g = new Graph();
+                {% for node in gr.nodes %}
+                    g.addNode("{{ node }}", {label: "{{ node }}", render: render});
+                {% endfor %}
+                {% for edge, attrs in gr.edges.items %}
+                    g.addEdge("{{ edge.0 }}", "{{ edge.1 }}", {{ attrs|safe }});
+                {% endfor %}
+                var layouter = new Graph.Layout.Spring(g);
+                var renderer = new Graph.Renderer.Raphael(container, g, width, height);
                 renderer.draw();
             });
         })(jQuery);
@@ -61,7 +77,7 @@
             </p>
         {% endif %}
         {% if not img_src and gr %}
-            {{  AA   }}
+            <div id="canvas"></div>
         {% endif %}
         <form action="." method="POST">
             {% csrf_token %}

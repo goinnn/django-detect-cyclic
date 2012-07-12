@@ -147,7 +147,9 @@ def _add_edge(gr, node1, node2, verbosity=1, style="filled"):
         weight = gr.edge_weight((node1, node2)) + 1
         gr.set_edge_weight((node1, node2), weight)
         gr.set_edge_label((node1, node2), "(%s)" % weight)
-    gr.add_edge_attribute((node1, node2), ("style", style))
+    attributes = dict(gr.edge_attributes((node1, node2)))
+    attributes['style'] = style
+    gr.edge_attr[(node1, node2)] = attributes.items()
 
 
 def _has_scope_global(gr, node1, node2):
@@ -201,8 +203,8 @@ def _get_app_colors(app):
     for ch in app:
         color += ord(ch) * int('754321', 16)
     color = int(color % int('ffffff', 16))
-    fillcolor = '#%s' % hex(color)
-    fontcolor = '#%s' % hex(abs(color - int('7fffff', 16)))
+    fillcolor = '#%s' % hex(color)[2:]
+    fontcolor = '#%s' % hex(abs(color - int('7fffff', 16)))[2:]
     return (fillcolor, fontcolor)
 
 

@@ -31,10 +31,12 @@ from pygraph.algorithms.cycles import find_cycle
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
 
+from django.utils.translation import ugettext_lazy as _
+
 from django_detect_cyclic.utils import print_log_info
 
 CYCLE_COLOR_SEED = "f8c85c"
-CYCLE_LABEL = 'Cycle'
+CYCLE_LABEL = _('Cycle')
 log = logging.getLogger('django_detect_cyclic.graph_utils.py')
 
 
@@ -65,7 +67,7 @@ def treatment_final_graph(gr, remove_isolated_nodes=False, remove_sink_nodes=Fal
                           remove_source_nodes=False, only_cyclic=False, verbosity=1):
     if only_cyclic:
         for edge, properties in gr.edge_properties.items():
-            if not CYCLE_LABEL in properties['label']:
+            if not unicode(CYCLE_LABEL) in properties['label']:
                 if print_log_info(verbosity):
                     log.info("Remove the edge %s-->%s" % edge)
                 gr.del_edge(edge)
@@ -108,11 +110,11 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
         except IndexError:
             next_item = cycle[0]
         weight = gr.edge_weight((item, next_item))
-        gr.set_edge_label((item, next_item), "%s %s (%s)" % (CYCLE_LABEL, number_cycle, weight))
+        gr.set_edge_label((item, next_item), "%s %s (%s)" % (unicode(CYCLE_LABEL), number_cycle, weight))
         gr_copy.del_edge((item, next_item))
         i += 1
         if use_colors:
-            cycle_color = '#%s' % hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))
+            cycle_color = '#%s' % hex((number_cycle * int('369369', 16) + int(CYCLE_COLOR_SEED, 16)) % int('ffffff', 16))[2:]
             gr.add_edge_attribute((item, next_item), ("color", cycle_color))
             gr.add_edge_attribute((item, next_item), ("fontcolor", cycle_color))
 
@@ -120,6 +122,7 @@ def mark_cycle(gr, cycle, number_cycle, gr_copy, use_colors=True):
 def print_graph(gr, file_path):
     dot = write(gr)
     gvv = gv.readstring(dot)
+    # circo, fdp, neato, dot, twopi
     gv.layout(gvv, 'dot')
     format = file_path.split('.')[-1]
     gv.render(gvv, format, file_path)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-11 13:10+0200\n"
+"POT-Creation-Date: 2012-07-11 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: forms.py:34
+#: forms.py:36
 msgid "Basic options"
 msgstr "Opciones básicas"
 
-#: forms.py:37
+#: forms.py:39
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
-#: forms.py:40
+#: forms.py:42
 msgid "Limits the graph"
 msgstr "Limita el grafo"
 
-#: forms.py:45
+#: forms.py:47
 msgid "Applications"
 msgstr "Aplicaciones"
 
-#: forms.py:47
+#: forms.py:49
 msgid "Choose the applications to analize"
 msgstr "Elige las aplicaciones a analizar"
 
-#: forms.py:48
+#: forms.py:50
 msgid "File name"
 msgstr "Nombre del fichero"
 
-#: forms.py:50
+#: forms.py:52
 msgid "Choose a name to the generated file (without extension)"
 msgstr "Elige un nombre para el archivo generado (sin extensión)"
 
-#: forms.py:51
+#: forms.py:54
 msgid "Format"
 msgstr "Formato"
 
-#: forms.py:52
+#: forms.py:55
 msgid "Exclude packages"
 msgstr "Excluye paquetes"
 
-#: forms.py:53
+#: forms.py:56
 msgid ""
 "Exclude the next packages. For example migrations,templatetags (separated by "
 "commas)"
@@ -61,11 +61,11 @@ msgstr ""
 "Excluye los siguientes paquetes. Por ejemplo: migrations,templatetags "
 "(separados por comas)"
 
-#: forms.py:54
+#: forms.py:57
 msgid "Force colors"
 msgstr "Fuerza colores"
 
-#: forms.py:55
+#: forms.py:58
 msgid ""
 "By default only if you choose svg format the result image will be colored. "
 "If you check this option the result image will be colored"
@@ -73,79 +73,87 @@ msgstr ""
 "Por defecto solo si tu eliges formato svg el resultado de la imagen estará "
 "colorada. Si tu seleccionas esta opción la imagen resultante será coloreada"
 
-#: forms.py:56
+#: forms.py:59
 msgid "Scope global"
 msgstr "Ambito global"
 
-#: forms.py:57
+#: forms.py:60
 msgid "The imports into the functions are ignored"
 msgstr "Los \"imports\" de dentro de las funciones son ignorados"
 
-#: forms.py:58
+#: forms.py:61
 msgid "Dotted scope local"
 msgstr "Punteado ambito local"
 
-#: forms.py:59
+#: forms.py:62
 msgid "The imports into the functions are printing with dotted line"
 msgstr ""
 "Los \"imports\" de dentro de las funciones están pintados con línea punteada"
 
-#: forms.py:60
+#: forms.py:63
 msgid "Show modules"
 msgstr "Muestra los modulos"
 
-#: forms.py:61
+#: forms.py:64
 msgid "The nodes now are the modules (by default are the applications)"
 msgstr "Los nodos ahora son los modulos (por defecto son las aplicaciones)"
 
-#: forms.py:62
+#: forms.py:65
 msgid "Only cyclic"
 msgstr "Solo ciclos"
 
-#: forms.py:63
+#: forms.py:66
 msgid "Removes the nodes that do not belong to any cycle"
 msgstr "Elimina los nodos que no pertenecen a ningun ciclo"
 
-#: forms.py:64
+#: forms.py:67
 msgid "Removes isolate nodes"
 msgstr "Elimina los nodos aislados"
 
-#: forms.py:65
+#: forms.py:68
 msgid "Removes the isolate nodes (without edgeds)"
 msgstr "Elimina los nodos aislados (sin aristas)"
 
-#: forms.py:66
+#: forms.py:69
 msgid "Removes sink nodes"
 msgstr "Elimina los nodos sumidero"
 
-#: forms.py:67
+#: forms.py:70
 msgid "Removes the sink nodes (without output edges)"
 msgstr "Elimina los nodos sumidero (sin aristas de salida)"
 
-#: forms.py:68
+#: forms.py:71
 msgid "Removes source nodes"
 msgstr "Elimina los nodos fuente"
 
-#: forms.py:69
+#: forms.py:72
 msgid "Removes the source nodes (without input edges)"
 msgstr "Elimina los nodos fuente (sin aristas de entrada)"
 
-#: forms.py:97
+#: forms.py:100
 msgid "This option is incompatible with dotted scope local"
 msgstr "Esta opción es incompatible con punteado ambito local"
 
-#: views.py:43
+#: forms.py:106
+msgid "This field is required."
+msgstr ""
+
+#: graph_utils.py:39
+msgid "Cycle"
+msgstr "Ciclo"
+
+#: views.py:48
 msgid "Detect cyclic"
 msgstr "Detecta ciclos"
 
-#: templates/detect_cyclic/detect_cyclic.html:25
+#: templates/detect_cyclic/detect_cyclic.html:53
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:35
+#: templates/detect_cyclic/detect_cyclic.html:63
 msgid "Download"
 msgstr "Descargar"
 
-#: templates/detect_cyclic/detect_cyclic.html:42
+#: templates/detect_cyclic/detect_cyclic.html:73
 msgid "Create Graph"
 msgstr "Crear Grafo"
