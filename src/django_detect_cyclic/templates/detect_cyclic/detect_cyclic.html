@@ -69,6 +69,9 @@
 
 {% block content %}
     <div id="content-main">
+        {% if message %}
+            <h2> {{ message }} </h2>
+        {% endif %}
         {% if img_src %}
             <img src="{{ img_src }}"/>
             <p>

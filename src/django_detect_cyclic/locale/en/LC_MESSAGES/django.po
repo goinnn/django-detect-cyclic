@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-12 16:21+0200\n"
+"POT-Creation-Date: 2012-07-13 12:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgid "Basic options"
 msgstr ""
 
 #: forms.py:44
-msgid "Advanced options"
+msgid "Scope options"
 msgstr ""
 
 #: forms.py:47
@@ -37,106 +37,106 @@ msgid "Choose the applications to analize"
 msgstr ""
 
 #: forms.py:55
-msgid "File name"
+msgid "Show modules"
+msgstr ""
+
+#: forms.py:56
+msgid "The nodes now are the modules (by default are the applications)"
 msgstr ""
 
 #: forms.py:57
-msgid "Choose a name to the generated file (without extension)"
+msgid "Use colors"
 msgstr ""
 
 #: forms.py:59
-msgid "Format"
+msgid ""
+"By default the image will be colored. If you uncheck this option the image "
+"will be black and white"
 msgstr ""
 
 #: forms.py:60
-msgid "Layout"
-msgstr ""
-
-#: forms.py:61
-msgid "Node layout. This does not work if you select format svg-js"
+msgid "File name"
 msgstr ""
 
 #: forms.py:62
+msgid "Choose a name to the generated file (without extension)"
+msgstr ""
+
+#: forms.py:64
+msgid "Format"
+msgstr ""
+
+#: forms.py:65
+msgid "Layout"
+msgstr ""
+
+#: forms.py:66
+msgid "Node layout. This does not work if you select format svg-js"
+msgstr ""
+
+#: forms.py:67
 msgid "Exclude packages"
 msgstr ""
 
-#: forms.py:63
+#: forms.py:68
 msgid ""
 "Exclude the next packages. For example migrations,templatetags (separated by "
 "commas)"
 msgstr ""
 
-#: forms.py:64
-msgid "Force colors"
-msgstr ""
-
-#: forms.py:65
-msgid ""
-"By default only if you choose svg format the result image will be colored. "
-"If you check this option the result image will be colored"
-msgstr ""
-
-#: forms.py:66
+#: forms.py:69
 msgid "Scope global"
 msgstr ""
 
-#: forms.py:67
+#: forms.py:70
 msgid "The imports into the functions are ignored"
 msgstr ""
 
-#: forms.py:68
+#: forms.py:71
 msgid "Dotted scope local"
 msgstr ""
 
-#: forms.py:69
+#: forms.py:72
 msgid "The imports into the functions are printing with dotted line"
 msgstr ""
 
-#: forms.py:70
-msgid "Show modules"
-msgstr ""
-
-#: forms.py:71
-msgid "The nodes now are the modules (by default are the applications)"
-msgstr ""
-
-#: forms.py:72
+#: forms.py:73
 msgid "Only cyclic"
 msgstr ""
 
-#: forms.py:73
+#: forms.py:74
 msgid "Removes the nodes that do not belong to any cycle"
 msgstr ""
 
-#: forms.py:74
+#: forms.py:75
 msgid "Removes isolate nodes"
 msgstr ""
 
-#: forms.py:75
+#: forms.py:76
 msgid "Removes the isolate nodes (without edgeds)"
 msgstr ""
 
-#: forms.py:76
+#: forms.py:77
 msgid "Removes sink nodes"
 msgstr ""
 
-#: forms.py:77
+#: forms.py:78
 msgid "Removes the sink nodes (without output edges)"
 msgstr ""
 
-#: forms.py:78
+#: forms.py:79
 msgid "Removes source nodes"
 msgstr ""
 
-#: forms.py:79
+#: forms.py:80
 msgid "Removes the source nodes (without input edges)"
 msgstr ""
 
-#: forms.py:111
+#: forms.py:112
 msgid "This option is incompatible with dotted scope local"
 msgstr ""
 
-#: forms.py:117
+#: forms.py:118
 msgid "This field is required."
 msgstr ""
 
@@ -144,7 +144,11 @@ msgstr ""
 msgid "Cycle"
 msgstr ""
 
-#: views.py:49
+#: views.py:50
+msgid "Graph empty (without nodes)"
+msgstr ""
+
+#: views.py:53
 msgid "Detect cyclic"
 msgstr ""
 
@@ -152,10 +156,10 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:75
+#: templates/detect_cyclic/detect_cyclic.html:78
 msgid "Download"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:85
+#: templates/detect_cyclic/detect_cyclic.html:88
 msgid "Create Graph"
 msgstr ""

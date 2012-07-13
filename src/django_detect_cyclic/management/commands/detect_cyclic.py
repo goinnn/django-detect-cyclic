@@ -32,8 +32,8 @@ class Command(BaseCommand):
                     help='The name to the generated path (you can set with path)'),
             make_option('-p', '--exclude-packages', dest='exclude_packages',
                     help='Exclude the next packages. For example migrations,templatetags (separated by commas)'),
-            make_option('-c', '--force-colors', dest='force_colors',  action="store_true",
-                    help='You can use this option when the format are not svg'),
+            make_option('-c', '--use_colors', dest='use_colors',  action="store_true",
+                    help='If you use this option the image will be colored'),
             make_option('-g', '--scope-global', dest='scope_global',  action="store_true",
                     help='The imports into the functions are ignored'),
             make_option('-d', '--dotted-scope-local', dest='dotted_scope_local',  action="store_true",
@@ -67,7 +67,7 @@ class Command(BaseCommand):
         only_cyclic = options['only_cyclic']
         show_modules = options['show_modules']
         file_name = options['file_name']
-        force_colors = options['force_colors']
+        use_colors = options['use_colors']
         dotted_scope_local = options['dotted_scope_local']
         scope_global = options['scope_global']
         scope = scope_global and SCOPE_GLOBAL or None
@@ -84,5 +84,5 @@ class Command(BaseCommand):
                                      remove_source_nodes=remove_source_nodes,
                                      only_cyclic=only_cyclic,
                                      scope=scope,
-                                     force_colors=force_colors,
+                                     use_colors=use_colors,
                                      dotted_scope_local=dotted_scope_local)

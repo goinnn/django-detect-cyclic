@@ -32,12 +32,11 @@ def create_graph_apps_dependence(file_name, include_apps=None, exclude_apps=None
                                  exclude_packages=None, verbosity=1, show_modules=False,
                                  remove_isolate_nodes=False, remove_sink_nodes=False,
                                  remove_source_nodes=False, only_cyclic=False, scope=None,
-                                 force_colors=False, dotted_scope_local=False,
+                                 use_colors=True, dotted_scope_local=False,
                                  layout='dot'):
     if only_cyclic:
         remove_isolate_nodes = True
     start_time = datetime.datetime.now()
-    use_colors = force_colors or file_name.endswith('.svg')
     gr = create_graph(include_apps, exclude_apps, exclude_packages, verbosity, show_modules, scope, use_colors, dotted_scope_local)
     find_all_cycle(gr, use_colors=use_colors)
     treatment_final_graph(gr, remove_isolate_nodes, remove_sink_nodes, remove_source_nodes,

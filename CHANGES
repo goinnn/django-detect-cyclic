@@ -1,11 +1,19 @@
 Releases
 ========
 
+0.0.5 (2012-07-12)
+------------------
+
+ * Change force-colors option to use-colors option
+ * Change distribution of the wizard
+ * Usability
+
 0.0.4 (2012-07-12)
 ------------------
 
  * Wizard to create graphs (/admin/detect_cyclic/)
  * Format svg-js (beta)
+ * Fix a little errors
 
 0.0.3 (2012-07-10)
 ------------------

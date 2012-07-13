@@ -39,19 +39,24 @@ class DetectCyclicForm(forms.Form):
 
     fieldsets = (
                     (_('Basic options'), {
-                        'fields': ('applications', 'file_name', 'format', 'layout')
+                        'fields': ('applications', 'show_modules', 'use_colors', 'file_name', 'format', 'layout')
                     }),
-                    (_('Advanced options'), {
-                        'fields': ('exclude_packages', 'force_colors', 'scope_global', 'dotted_scope_local', 'show_modules'),
+                    (_('Scope options'), {
+                        'fields': ('scope_global', 'dotted_scope_local'),
                     }),
                     (_('Limits the graph'), {
-                        'fields': ('only_cyclic', 'remove_isolate_nodes', 'remove_sink_nodes', 'remove_source_nodes'),
+                        'fields': ('exclude_packages', 'only_cyclic', 'remove_isolate_nodes', 'remove_sink_nodes', 'remove_source_nodes'),
                     }),
                 )
 
     applications = forms.MultipleChoiceField(label=_('Applications'),
                          choices=[(app, app) for app in settings.INSTALLED_APPS],
                          help_text=_('Choose the applications to analize'))
+    show_modules = forms.BooleanField(label=_('Show modules'), required=False,
+        help_text=_('The nodes now are the modules (by default are the applications)'))
+    use_colors = forms.BooleanField(label=_('Use colors'), required=False,
+                                    initial=True,
+                                    help_text=_('By default the image will be colored. If you uncheck this option the image will be black and white'))
     file_name = forms.CharField(label=_('File name'),
                          initial=DEFAULT_FILENAME,
                          help_text=_('Choose a name to the generated file (without extension)'),
@@ -61,14 +66,10 @@ class DetectCyclicForm(forms.Form):
                         help_text=_('Node layout. This does not work if you select format svg-js'))
     exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
                        help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
-    force_colors = forms.BooleanField(label=_('Force colors'), required=False,
-        help_text=_('By default only if you choose svg format the result image will be colored. If you check this option the result image will be colored'))
     scope_global = forms.BooleanField(label=_('Scope global'), required=False,
         help_text=_('The imports into the functions are ignored'))
     dotted_scope_local = forms.BooleanField(label=_('Dotted scope local'), initial=True, required=False,
         help_text=_('The imports into the functions are printing with dotted line'))
-    show_modules = forms.BooleanField(label=_('Show modules'), required=False,
-        help_text=_('The nodes now are the modules (by default are the applications)'))
     only_cyclic = forms.BooleanField(label=_('Only cyclic'), initial=True, required=False,
        help_text=_('Removes the nodes that do not belong to any cycle'))
     remove_isolate_nodes = forms.BooleanField(label=_('Removes isolate nodes'), required=False,
@@ -136,7 +137,7 @@ class DetectCyclicForm(forms.Form):
         scope = None
         if scope_global:
             scope = SCOPE_GLOBAL
-        force_colors = self.cleaned_data['force_colors']
+        use_colors = self.cleaned_data['use_colors']
         dotted_scope_local = self.cleaned_data['dotted_scope_local']
         file_name = self.cleaned_data['file_name']
         if file_name:
@@ -146,7 +147,7 @@ class DetectCyclicForm(forms.Form):
             file_name = str(os.path.join(graph_dir,
                             '%s.%s' % (file_name, self.cleaned_data['format'])))
         else:
-            force_colors = True
+            use_colors = True
         gr = create_graph_apps_dependence(file_name=file_name, include_apps=applications,
                                         exclude_apps=None, exclude_packages=exclude_packages,
                                         verbosity=verbosity, show_modules=show_modules,
@@ -154,7 +155,7 @@ class DetectCyclicForm(forms.Form):
                                         remove_sink_nodes=remove_sink_nodes,
                                         remove_source_nodes=remove_source_nodes,
                                         only_cyclic=only_cyclic, scope=scope,
-                                        force_colors=force_colors,
+                                        use_colors=use_colors,
                                         dotted_scope_local=dotted_scope_local,
                                         layout=layout)
         return (gr, file_name)

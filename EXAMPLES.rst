@@ -8,12 +8,12 @@ Examples
 In these examples we propose a typical sequence to find the cycles in our project, and can see dangerous dependencies
 
 
-Call to the command without options (only verbosity, and exclude the south migrations):
+Call to the command without options (only verbosity, exclude the south migrations and use_colors):
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-first.svg" --verbosity=2 --exclude-packages=migrations
-    ./bin/django detect_cyclic --file-name="examples/example-first.png" --verbosity=2 --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-first.svg" --verbosity=2 --exclude-packages=migrations --use-colors
+    ./bin/django detect_cyclic --file-name="examples/example-first.png" --verbosity=2 --exclude-packages=migrations --use-colors
     INFO: Duration: 0:00:06.611381
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-first.png
@@ -22,8 +22,8 @@ In this image I can not see anything. I am interested in the cycles, I use this 
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.svg" --verbosity=2 --only-cyclic --exclude-packages=migrations
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.png" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.svg" --verbosity=2 --only-cyclic --exclude-packages=migrations --use-colors
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic.png" --verbosity=2 --only-cyclic --exclude-packages=migrations --use-colors
     INFO: Duration: 0:00:06.535613
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-only-cyclic.png
@@ -32,8 +32,8 @@ I exclude the django applications (exclude-apps):
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.svg" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations
-    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.png" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.svg" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations --use-colors
+    ./bin/django detect_cyclic --file-name="examples/example-only-cyclic-exclude.png" --exclude-apps="django.contrib.messages,django.contrib.auth,django.contrib.contenttypes,django.contrib.admin" --verbosity=2 --only-cyclic --exclude-packages=migrations --use-colors
     INFO: Duration: 0:00:05.038461
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-only-cyclic-exclude.png
@@ -42,8 +42,8 @@ I want to analize the cycles. I need to know modules which are involved in these
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-modules.svg" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations
-    ./bin/django detect_cyclic --file-name="examples/example-modules.png" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations
+    ./bin/django detect_cyclic --file-name="examples/example-modules.svg" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --use-colors
+    ./bin/django detect_cyclic --file-name="examples/example-modules.png" --verbosity=2 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --use-colors
     INFO: Duration: 0:00:27.532323
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-modules.png
@@ -53,8 +53,8 @@ Also I want to know what import is into a function and what import is a global i
 
 ::
 
-    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.svg" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
-    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.png" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local
+    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.svg" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local --use-colors
+    ./bin/django detect_cyclic --file-name="examples/example-modules-dotted.png" --verbosity=0 --only-cyclic --include-apps=bpmui,authentication,wfui,cmisadaptor,wfadaptor --show-modules --exclude-packages=migrations --dotted-scope-local --use-colors
     INFO: Duration: 0:00:34.074046
 
 .. image:: https://github.com/goinnn/django-detect-cyclic/raw/master/examples/example-modules-dotted.png
@@ -95,7 +95,7 @@ We can use scope-global to see only the global imports.
         -p EXCLUDE_PACKAGES, --exclude-packages=EXCLUDE_PACKAGES
                                 Exclude the next packages. For example
                                 migrations,templatetags (separated by commas)
-        -c, --force-colors    You can use this option when the format are not svg
+        -c, --use_colors      If you use this option the image will be colored
         -g, --scope-global    The imports into the functions are ignored
         -d, --dotted-scope-local
                                 The imports into the functions are printing with
