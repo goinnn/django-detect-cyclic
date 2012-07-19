@@ -45,12 +45,12 @@ In your urls.py:
 Caption
 =======
 
- * The nodes are the applications, or the modules of the applications (if you use the option show-modules)
- * One edge means that the node source import the node destination
- * When there is a cycle the edge has a background color (the same color in all the cycle), and it label contains "Cycle X"
- * The label of the edges contains the weight in parentheses
- * If you use the options show-modules, each node has a background color. If two nodes are to the same application, they have the same background color.
- * If a edge is dotted, every import between these two nodes is into a function
+ * The nodes are applications, or (if you use the option “Show modules”) modules in the applications
+ * One edge means that the source node imports from the destination node
+ * Every edge of a cycle has the same background color and the label contains “Cycle X”
+ * The labels of the edges contain the weight in parentheses
+ * If you use the “Show modules” option, each node will have a background color. If two nodes are from the same application, they will have the same background color.
+ * If an edge is dotted, every import in the source happens at runtime, whithin the body of a function or method
 
 
 Possibles Errors
