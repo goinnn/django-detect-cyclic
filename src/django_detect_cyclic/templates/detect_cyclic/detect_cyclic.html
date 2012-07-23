@@ -8,46 +8,51 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
     <script type="text/javascript" src="{{ jsi18nurl|default:"../../jsi18n/" }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
-
-    {% if gr %}
-        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/raphael-min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graffle.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/dracula_graph.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/dracula/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript">
-        (function($) {
-            $(document).ready(function () {
-                var render = function(r, n) {
-                    var width_node = n.label.length * 6;
-                    if (width_node < 100) {
-                        width_node = 100;
-                    }
-                    var set = r.set().push(
-                        /* custom objects go here */
-                        r.rect(n.point[0] - width_node/2, n.point[1]-40, width_node, 100).attr({"fill": n.color, r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
-                        r.text(n.point[0], n.point[1] + 10, (n.label || n.id)));
-                    return set;
-                };
-                var container = "canvas";
-                var height = 500;
-                var width = $("#"+container).width();
-                var g = new Graph();
-                {% for node, attrs in gr.nodes.items %}
-                    var attrs = {{ attrs|safe }};
-                    attrs["render"] = render;
-                    g.addNode("{{ node }}", attrs);
-                {% endfor %}
-                {% for edge, attrs in gr.edges.items %}
-                    g.addEdge("{{ edge.0 }}", "{{ edge.1 }}", {{ attrs|safe }});
-                {% endfor %}
-                var layouter = new Graph.Layout.Spring(g);
-                var renderer = new Graph.Renderer.Raphael(container, g, width, height);
-                renderer.draw();
-            });
-        })(jQuery);
-        </script>
+    {% if img_src %}
+        {% ifequal form.cleaned_data.format "svg-js" %}
+            {% block svgjs.media %}
+                {% include "detect_cyclic/inc.svg_js_libraries.html"%}
+                <script type="text/javascript">
+                    (function($){
+                        $(document).ready(function () {
+                            $.ajax({url: "{{  img_src }}",
+                                type: "GET",
+                                async: true,
+                                success: function(response) {
+                                    var serializer = new XMLSerializer();
+                                    var str = serializer.serializeToString($(response).find("svg")[0]);
+                                    $("div#graph").html(str);
+                                    $("svg").graphviz();
+                                    var currentWidth =  $("svg").attr("width").baseVal.value;
+                                    var currentHeight =  $("svg").attr("height").baseVal.value;
+                                    var parentWidth = $("svg").parent().width();
+                                    if (parentWidth > currentWidth) {
+                                        $("svg").width("100%");
+                                    }
+                                }
+                            });
+                            $("a.download").attr("href", "#download");
+                            $("a.download").click(function () {
+                                var data = {};
+                                var serializer = new XMLSerializer();
+                                data["svgPath"] = "{{ img_src }}";
+                                data["svg"] = serializer.serializeToString($("svg")[0]);
+                                $.ajax({data: data,
+                                        url: "{% url save_ajax_svg %}",
+                                        type: "POST",
+                                        async: true,
+                                        success: function(response) {
+                                            window.location.href = "{{ img_src }}";
+                                        }
+                                });
+                                return false;
+                            });
+                        });
+                    })(jQuery);
+                </script>
+            {% endblock svgjs.media %}
+        {% endifequal %}
     {% endif %}
-
     {{ form.media }}
 {% endblock %}
 
@@ -73,13 +78,14 @@
             <h2> {{ message }} </h2>
         {% endif %}
         {% if img_src %}
-            <img src="{{ img_src }}"/>
+            <div id="graph">
+                {% ifnotequal form.cleaned_data.format "svg-js" %}
+                    <img src="{{ img_src }}"/>
+                {% endifnotequal %}
+            </div>
             <p>
-                <a href="{{ img_src }}" target="_blank">{% trans "Download" %}</a>
+                <a href="{{ img_src }}" class="download" target="_blank">{% trans "Download" %}</a>
             </p>
-        {% endif %}
-        {% if gr %}
-            <div id="canvas"></div>
         {% endif %}
         <form action="." method="POST">
             {% csrf_token %}

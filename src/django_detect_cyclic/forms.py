@@ -60,10 +60,10 @@ class DetectCyclicForm(forms.Form):
     file_name = forms.CharField(label=_('File name'),
                          initial=DEFAULT_FILENAME,
                          help_text=_('Choose a name to the generated file (without extension)'),
-                         required=False)
+                         required=True)
     format = forms.ChoiceField(label=_('Format'), initial=DEFAULT_FORMAT)
     layout = forms.ChoiceField(label=_('Layout'), choices=LAYOUT_CHOICES, initial=DEFAULT_LAYOUT,
-                        help_text=_('Node layout. This does not work if you select format svg-js'))
+                        help_text=_('Node layout'))
     exclude_packages = forms.CharField(label=_('Exclude packages'), required=False,
                        help_text=_('Exclude the next packages. For example migrations,templatetags (separated by commas)'))
     scope_global = forms.BooleanField(label=_('Scope global'), required=False,
@@ -111,14 +111,6 @@ class DetectCyclicForm(forms.Form):
             scope_global_errors = self._errors.get('scope_global', ErrorList())
             scope_global_errors.append(_('This option is incompatible with dotted scope local'))
             self._errors['scope_global'] = scope_global_errors
-        format = cleaned_data['format']
-        file_name = cleaned_data['file_name']
-        if format != FORMAT_SPECIAL and not file_name:
-            file_name_errors = self._errors.get('file_name', ErrorList())
-            file_name_errors.append(_('This field is required.'))
-            self._errors['file_name'] = file_name_errors
-        elif format == FORMAT_SPECIAL:
-            cleaned_data['file_name'] = None
         return cleaned_data
 
     def detect_cyclic(self):
@@ -144,8 +136,11 @@ class DetectCyclicForm(forms.Form):
             graph_dir = os.path.join(settings.MEDIA_ROOT, 'graph')
             if not os.path.isdir(graph_dir):
                 os.mkdir(graph_dir)
+            format_path = self.cleaned_data['format']
+            if format_path == FORMAT_SPECIAL:
+                format_path = 'svg'
             file_name = str(os.path.join(graph_dir,
-                            '%s.%s' % (file_name, self.cleaned_data['format'])))
+                            '%s.%s' % (file_name, format_path)))
         else:
             use_colors = True
         gr = create_graph_apps_dependence(file_name=file_name, include_apps=applications,

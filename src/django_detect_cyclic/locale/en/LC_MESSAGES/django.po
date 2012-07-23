@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-13 12:41+0200\n"
+"POT-Creation-Date: 2012-07-23 13:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgid "Layout"
 msgstr ""
 
 #: forms.py:66
-msgid "Node layout. This does not work if you select format svg-js"
+msgid "Node layout"
 msgstr ""
 
 #: forms.py:67
@@ -136,30 +136,26 @@ msgstr ""
 msgid "This option is incompatible with dotted scope local"
 msgstr ""
 
-#: forms.py:118
-msgid "This field is required."
-msgstr ""
-
 #: graph_utils.py:39
 msgid "Cycle"
 msgstr ""
 
-#: views.py:50
+#: views.py:47
 msgid "Graph empty (without nodes)"
 msgstr ""
 
-#: views.py:53
+#: views.py:50
 msgid "Detect cyclic"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:65
+#: templates/detect_cyclic/detect_cyclic.html:75
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:78
+#: templates/detect_cyclic/detect_cyclic.html:92
 msgid "Download"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:88
+#: templates/detect_cyclic/detect_cyclic.html:102
 msgid "Create Graph"
 msgstr ""

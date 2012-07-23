@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-13 12:41+0200\n"
+"POT-Creation-Date: 2012-07-23 13:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,8 +54,8 @@ msgid ""
 "By default the image will be colored. If you uncheck this option the image "
 "will be black and white"
 msgstr ""
-"Por defecto la imagen será coloreada. Si tu deseleccionas esta opción la imagen"
-"será en blanco y negro"
+"Por defecto la imagen será coloreada. Si tu deseleccionas esta opción la "
+"imagenserá en blanco y negro"
 
 #: forms.py:60
 msgid "File name"
@@ -74,10 +74,8 @@ msgid "Layout"
 msgstr "Disposición"
 
 #: forms.py:66
-msgid "Node layout. This does not work if you select format svg-js"
-msgstr ""
-"Disposición de los nodos. Este no funciona si tu seleccionas el formato svg-"
-"js"
+msgid "Node layout"
+msgstr "Disposición de los nodos"
 
 #: forms.py:67
 msgid "Exclude packages"
@@ -144,30 +142,31 @@ msgstr "Elimina los nodos fuente (sin aristas de entrada)"
 msgid "This option is incompatible with dotted scope local"
 msgstr "Esta opción es incompatible con punteado ambito local"
 
-#: forms.py:118
-msgid "This field is required."
-msgstr ""
-
 #: graph_utils.py:39
 msgid "Cycle"
 msgstr "Ciclo"
 
-#: views.py:50
+#: views.py:47
 msgid "Graph empty (without nodes)"
 msgstr "Grafo vacío (sin nodos)"
 
-#: views.py:53
+#: views.py:50
 msgid "Detect cyclic"
 msgstr "Detecta ciclos"
 
-#: templates/detect_cyclic/detect_cyclic.html:65
+#: templates/detect_cyclic/detect_cyclic.html:75
 msgid "Home"
 msgstr ""
 
-#: templates/detect_cyclic/detect_cyclic.html:78
+#: templates/detect_cyclic/detect_cyclic.html:92
 msgid "Download"
 msgstr "Descargar"
 
-#: templates/detect_cyclic/detect_cyclic.html:88
+#: templates/detect_cyclic/detect_cyclic.html:102
 msgid "Create Graph"
 msgstr "Crear Grafo"
+
+#~ msgid "Node layout. This does not work if you select format svg-js"
+#~ msgstr ""
+#~ "Disposición de los nodos. Este no funciona si tu seleccionas el formato "
+#~ "svg-js"

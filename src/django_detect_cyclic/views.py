@@ -15,13 +15,12 @@
 # along with this software.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import random
 
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
 from django.utils.translation import ugettext as _
 
 from django_detect_cyclic.forms import DetectCyclicForm
@@ -44,8 +43,6 @@ def detect_cyclic(request):
                 if img_src and img_src[0] == '/':
                     img_src = img_src[1:]
                 img_src = os.path.join(settings.MEDIA_URL, img_src)
-            else:
-                gr_js = _get_gr_to_js(gr)
         else:
             message = _('Graph empty (without nodes)')
     return render_to_response('detect_cyclic/detect_cyclic.html',
@@ -57,40 +54,11 @@ def detect_cyclic(request):
                               context_instance=RequestContext(request))
 
 
-def _get_gr_to_js(gr):
-    gr_js = {'edges': {},
-             'nodes': {}}
-    attrs_edge_convert = {'color': 'stroke',
-                          'color': 'fill'}
-    old_edges = []
-    for edge in gr.edges():
-        attrs = dict(gr.edge_attributes(edge))
-        properties = gr.edge_properties.get(edge) or {}
-        attrs.update(properties)
-        attrs['directed'] = True
-        for attr_gr, attr_gr_js in attrs_edge_convert.items():
-            attr = attrs.get(attr_gr, None)
-            if attr:
-                attrs[attr_gr_js] = attr
-        if attrs.get('style') == 'dotted':
-            attrs['stroke-dasharray'] = "1,5"
-        else:
-            attrs['stroke-dasharray'] = ""
-        seed = 0
-        random_seed = random.randint(1, 10)
-        for char in edge[0] + edge[1]:
-            seed += ord(char)
-        attrs['seed_in'] = random_seed * seed % 31
-        attrs['seed_out'] = random_seed * seed % 37
-        attrs['label'] = '%s --> %s %s' % (edge[0],
-                                           edge[1],
-                                           attrs['label'])
-        if (edge[1], edge[0]) in old_edges:
-            attrs['seed_label'] = 40
-        old_edges.append(edge)
-        gr_js['edges'][edge] = simplejson.dumps(attrs)
-    for node in gr.nodes():
-        attrs = dict(gr.node_attributes(node))
-        attrs['label'] = node
-        gr_js['nodes'][node] = simplejson.dumps(attrs)
-    return gr_js
+@permission_required('detect_cyclic.view_graph')
+def save_ajax_svg(request):
+    svg_path = request.POST['svgPath'].replace(settings.MEDIA_URL[:-1],
+                                               settings.MEDIA_ROOT)
+    f = file(svg_path, "w")
+    f.write(request.POST['svg'])
+    f.close()
+    return HttpResponse("ok")

@@ -19,4 +19,5 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('django_detect_cyclic.views',
     url(r'^$', 'detect_cyclic', name='detect_cyclic'),
+    url(r'^ajax/save/svg/$', 'save_ajax_svg', name='save_ajax_svg'),
 )
