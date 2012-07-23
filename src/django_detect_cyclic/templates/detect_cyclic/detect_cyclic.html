@@ -41,7 +41,7 @@
                                         type: "POST",
                                         async: true,
                                         success: function(response) {
-                                            window.location.href = "{{ img_src }}";
+                                            window.open("{{ img_src }}", "_blank");
                                         }
                                 });
                                 return false;

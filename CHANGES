@@ -1,10 +1,15 @@
 Releases
 ========
 
+0.0.7 (2012-??-??)
+------------------
+
+ * Detail to the js
+
 0.0.6 (2012-07-23)
 ------------------
 
-* Format svg-js (beta). Change dracula js to `jquery.graphviz.js <https://github.com/goinnn/jquery.graphviz/>`_ (Tested in Chrome and FireFox)
+ * Format svg-js (beta). Change dracula js to `jquery.graphviz.js <https://github.com/goinnn/jquery.graphviz/>`_ (Tested in Chrome and FireFox)
 
 
 0.0.5 (2012-07-13)
