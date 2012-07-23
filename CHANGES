@@ -1,7 +1,13 @@
 Releases
 ========
 
-0.0.5 (2012-07-12)
+0.0.6 (2012-07-23)
+------------------
+
+* Format svg-js (beta). Change dracula js to `jquery.graphviz.js <https://github.com/goinnn/jquery.graphviz/>`_ (Tested in Chrome and FireFox)
+
+
+0.0.5 (2012-07-13)
 ------------------
 
  * Change force-colors option to use-colors option
@@ -12,7 +18,7 @@ Releases
 ------------------
 
  * Wizard to create graphs (/admin/detect_cyclic/)
- * Format svg-js (beta)
+ * Format svg-js (alpha)
  * Fix a little errors
 
 0.0.3 (2012-07-10)
