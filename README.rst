@@ -17,6 +17,7 @@ Requeriments
  * `pysmell <http://pypi.python.org/pypi/pysmell/>`_ (0.7.3)
  * `pyplete <http://pypi.python.org/pypi/pyplete/>`_ (0.0.1)
  * `django-form-admin <http://pypi.python.org/pypi/django-form-admin>`_ (0.3.2) (optional)
+ * `jquery.graphviz <https://github.com/goinnn/jquery.graphviz/>`_ (fronzen into the app, only to svg-js format)
 
 
 Installation
