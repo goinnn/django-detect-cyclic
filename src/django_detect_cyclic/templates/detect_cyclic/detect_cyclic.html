@@ -23,8 +23,7 @@
                                     var str = serializer.serializeToString($(response).find("svg")[0]);
                                     $("div#graph").html(str);
                                     $("svg").graphviz();
-                                    var currentWidth =  $("svg").attr("width").baseVal.value;
-                                    var currentHeight =  $("svg").attr("height").baseVal.value;
+                                    var currentWidth =  $("svg").width();
                                     var parentWidth = $("svg").parent().width();
                                     if (parentWidth > currentWidth) {
                                         $("svg").width("100%");
