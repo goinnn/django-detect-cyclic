@@ -1,9 +1,10 @@
 Releases
 ========
 
-0.0.7 (2012-??-??)
+0.0.7 (2012-07-25)
 ------------------
 
+ * Now jquery.graphviz has a stable version (0.0.1, Tested in Chrome, FireFox, Safari and IE9)
  * Detail to the js
 
 0.0.6 (2012-07-23)

@@ -23,7 +23,7 @@ def read(*rnames):
 
 setup(
     name="django-detect-cyclic",
-    version="0.0.6",
+    version="0.0.7",
     author="Pablo Martin",
     author_email="goinnn@gmail.com",
     description="Django application to detect cyclic imports",

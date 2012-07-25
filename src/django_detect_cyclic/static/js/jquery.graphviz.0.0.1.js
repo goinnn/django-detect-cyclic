@@ -1,4 +1,3 @@
-// Get from https://github.com/goinnn/jquery.graphviz/blob/master/source/jquery.graphviz.js
 /*
  Copyright (c) 2012 by Pablo Martín <goinnn@gmail.com>
 
@@ -79,6 +78,8 @@
                     point.y2 = point.y2 + iy;
                 }
             }
+            // This is neccesary to works in IE9
+            pathItem.setAttribute("d", pathItem.getAttribute("d"));
         }
         function moveEdge(edgeItem, ix, iy, io) {
             var children = $(edgeItem).children();
