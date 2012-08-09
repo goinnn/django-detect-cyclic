@@ -7,6 +7,7 @@ Releases
  * Loaded a templatetag, and with this you get a error
  * Now works the js in Django 1.4
  * Fix a error when you had some application repeat in your settings (INSTALLED_APPS)
+ * Fix a csr error when you click in download the graph and the format is svg-js
 
 
 0.0.7 (2012-07-25)

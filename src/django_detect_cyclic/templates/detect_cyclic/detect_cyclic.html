@@ -38,6 +38,7 @@
                                 var serializer = new XMLSerializer();
                                 data["svgPath"] = "{{ img_src }}";
                                 data["svg"] = serializer.serializeToString($("svg")[0]);
+                                data["csrfmiddlewaretoken"] = $("input[name=csrfmiddlewaretoken]").val();
                                 $.ajax({data: data,
                                         url: "{% url save_ajax_svg %}",
                                         type: "POST",
