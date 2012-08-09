@@ -1,6 +1,14 @@
 Releases
 ========
 
+0.0.8 (2012-08-09)
+------------------
+
+ * Loaded a templatetag, and with this you get a error
+ * Now works the js in Django 1.4
+ * Fix a error when you had some application repeat in your settings (INSTALLED_APPS)
+
+
 0.0.7 (2012-07-25)
 ------------------
 

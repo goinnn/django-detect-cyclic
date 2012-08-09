@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 
-{% load i18n inplace_edit %}
+{% load i18n %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -8,6 +8,8 @@
     {% url 'admin:jsi18n' as jsi18nurl %}
     <script type="text/javascript" src="{{ jsi18nurl|default:"../../jsi18n/" }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}admin/js/calendar.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}admin/js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}admin/js/jquery.init.js"></script>
     {% if img_src %}
         {% ifequal form.cleaned_data.format "svg-js" %}
             {% block svgjs.media %}

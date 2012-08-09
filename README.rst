@@ -43,6 +43,22 @@ In your urls.py:
 
     )
 
+Make sure that you have in your urls jsi18nurl:
+
+::
+
+    js_info_dict = {
+        'packages': ('your.app.package',),
+    }
+
+    urlpatterns = patterns('',
+
+        url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+
+    )
+
+
+
 Caption
 =======
 

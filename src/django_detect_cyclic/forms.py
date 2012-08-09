@@ -50,7 +50,6 @@ class DetectCyclicForm(forms.Form):
                 )
 
     applications = forms.MultipleChoiceField(label=_('Applications'),
-                         choices=[(app, app) for app in settings.INSTALLED_APPS],
                          help_text=_('Choose the applications to analize'))
     show_modules = forms.BooleanField(label=_('Show modules'), required=False,
         help_text=_('The nodes now are the modules (by default are the applications)'))
@@ -89,7 +88,11 @@ class DetectCyclicForm(forms.Form):
         formats.sort()
         self.fields['format'].choices = formats
         applications_label = self.fields['applications'].label
-        applications_choices = self.fields['applications'].choices
+        applications_choices = []
+        for app in settings.INSTALLED_APPS:
+            if not (app, app) in applications_choices:
+                applications_choices.append((app, app))
+        self.fields['applications'].choices = applications_choices
         applications_initial = [app_value for app_label, app_value in applications_choices
                                               if not app_value.startswith('django.') and app_value != 'django_detect_cyclic']
         self.fields['applications'].initial = applications_initial
