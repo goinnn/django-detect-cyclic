@@ -18,6 +18,7 @@ import compiler
 
 from django.conf import settings
 
+from pyplete import PyPleteModuleDict
 from pyplete import PyPlete as PyPleteOriginal
 from pysmell.codefinder import CodeFinder, getName, getFuncArgs
 
@@ -46,7 +47,7 @@ class PyPlete(PyPleteOriginal):
                                       *args, **kwargs)
         self.scope = scope
 
-    def get_pysmell_modules_to_text(self, text):
+    def get_pysmell_code_walk_to_text(self, text):
         code = compiler.parse(text)
 
         class GlobalCodeFinder(CodeFinder):
@@ -73,8 +74,8 @@ class PyPlete(PyPleteOriginal):
             codefinder = GlobalCodeFinder()
         else:
             codefinder = CodeFinder()
-        code_walk = compiler.walk(code, codefinder)
-        return code_walk.modules
+        codefinder.modules = PyPleteModuleDict()
+        return compiler.walk(code, codefinder)
 
 
 def print_log_info(verbosity):

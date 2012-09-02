@@ -17,6 +17,8 @@
 import datetime
 import logging
 
+from django.conf import settings
+
 from pygraph.classes.digraph import digraph
 
 from django_detect_cyclic.utils import PyPlete, SCOPE_GLOBAL, format_color
@@ -81,14 +83,16 @@ def _add_edges_to_package(gr, package, app_source, applications,
         if print_log_error(verbosity):
             log.error("\t File: %s SyntaxError %s" % (package_modules, e))
 
-    for importable_to_app, importable_type  in importables_to_app:
+    for imp  in importables_to_app:
+        importable_to_app = imp['text']
+        importable_type = imp['category']
         if importable_type == 'package':
             if exclude_packages and importable_to_app in exclude_packages:
                 if print_log_info(verbosity):
                     log.info('\t Ignore %s' % importable_to_app)
                 continue
             subpackage = '%s.%s' % (package, importable_to_app)
-            if subpackage not in applications:
+            if subpackage not in settings.INSTALLED_APPS:
                 _add_edges_to_package(gr, subpackage, app_source, applications, pyplete,
                                       exclude_packages=exclude_packages,
                                       show_modules=show_modules,
@@ -103,6 +107,8 @@ def _add_edges_to_package(gr, package, app_source, applications,
             node_source = _add_node_init('.'.join(node), applications)
             if not gr.has_node(node_source):
                 _add_node_module(gr, node_source, applications, app_source=app_source, use_colors=use_colors)
+        else:
+            node_source = None
         code = pyplete.get_imp_loader_from_path(package_modules[0], package_modules[1:] + [importable_to_app])[0].get_source()
         try:
             imports_code = pyplete.get_pysmell_modules_to_text(code)['POINTERS']
@@ -110,31 +116,67 @@ def _add_edges_to_package(gr, package, app_source, applications,
             if print_log_error(verbosity):
                 log.error("\t File: %s SyntaxError %s" % (package_modules + [importable_to_app], e))
             continue
-        if show_modules:
-            for import_code in imports_code.values():
-                node_destination = _add_node_init(
-                                        _get_module_to_generic_import(gr,
-                                                                      import_code.split('.'),
-                                                                      pyplete=pyplete,
-                                                                      verbosity=verbosity,
-                                                                      scope=scope),
-                                        applications)
-                if node_destination:
-                    added = _add_node_module(gr, node_destination, applications,
-                                             use_colors=use_colors)
-                    if added:
-                        style = _edge_style(pyplete_global, gr, node_source,
-                                            node_destination, import_code, code)
-                        _add_edge(gr, node_source, node_destination, verbosity, style)
-        else:
-            for import_code in imports_code.values():
-                if not import_code.startswith(app_source):
-                    for app_destination in applications:
-                        if import_code.startswith(app_destination):
-                            style = _edge_style(pyplete_global, gr, app_source,
-                                                app_destination, import_code, code)
-                            _add_edge(gr, app_source, app_destination, verbosity, style)
-                            break
+        for import_code in imports_code.values():
+            if isinstance(import_code, list):
+                for i in import_code:
+                    _add_edge_from_import_code(gr, applications, app_source,
+                                               package_modules, i,
+                                               code,
+                                               node_source=node_source,
+                                               pyplete=pyplete,
+                                               show_modules=show_modules,
+                                               verbosity=verbosity,
+                                               scope=scope,
+                                               use_colors=use_colors,
+                                               pyplete_global=pyplete_global)
+            else:
+                _add_edge_from_import_code(gr, applications, app_source,
+                                           package_modules,
+                                           import_code, code,
+                                           node_source=node_source,
+                                           pyplete=pyplete,
+                                           show_modules=show_modules,
+                                           verbosity=verbosity,
+                                           scope=scope,
+                                           use_colors=use_colors,
+                                           pyplete_global=pyplete_global)
+
+
+def _add_edge_from_import_code(gr, applications, app_source, package_modules, import_code, code,
+                               node_source=None,
+                               pyplete=None,
+                               show_modules=False, verbosity=1,
+                               scope=None, use_colors=True, pyplete_global=None):
+    if show_modules:
+        node = _get_module_to_generic_import(gr,
+                                             import_code.split('.'),
+                                             pyplete=pyplete,
+                                             verbosity=verbosity,
+                                             scope=scope)
+        if not node:
+            import_relative = package_modules + import_code.split('.')
+            node = _get_module_to_generic_import(gr,
+                                                 import_relative,
+                                                 pyplete=pyplete,
+                                                 verbosity=verbosity,
+                                                 scope=scope)
+        node_destination = _add_node_init(node, applications)
+        if node_destination:
+            added = _add_node_module(gr, node_destination, applications,
+                                        use_colors=use_colors)
+            if added:
+                style = _edge_style(pyplete_global, gr, node_source,
+                                    node_destination, import_code, code)
+                _add_edge(gr, node_source, node_destination, verbosity, style)
+    else:
+        app_destination = _get_app_to_import(import_code, applications)
+        if not app_destination:
+            import_relative = '.'.join(package_modules + import_code.split('.'))
+            app_destination = _get_app_to_import(import_relative, applications)
+        if app_destination and app_source != app_destination:
+            style = _edge_style(pyplete_global, gr, app_source,
+                                app_destination, import_code, code)
+            _add_edge(gr, app_source, app_destination, verbosity, style)
 
 
 def _add_edge(gr, node1, node2, verbosity=1, style="filled"):
@@ -189,13 +231,15 @@ def _get_module_to_generic_import(gr, import_code, pyplete=None, verbosity=1, sc
 def _get_app_to_import(node, applications):
     score = len(node)
     candidate = None
-    for app in applications:
+    for app in settings.INSTALLED_APPS:
         if node.startswith(app):
             current_score = len(node) - len(app)
             if current_score < score:
                 score = current_score
                 candidate = app
-    return candidate
+    if candidate in applications:
+        return candidate
+    return None
 
 
 def _get_app_colors(app):
