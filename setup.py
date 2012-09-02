@@ -23,7 +23,7 @@ def read(*rnames):
 
 setup(
     name="django-detect-cyclic",
-    version="0.0.8",
+    version="0.0.9",
     author="Pablo Martin",
     author_email="goinnn@gmail.com",
     description="Django application to detect cyclic imports",
@@ -34,6 +34,13 @@ setup(
         'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
     ],
     license="LGPL 3",
+    install_requires=[
+        "pysmell==0.7.3",
+        "pyplete==0.0.2",
+        "python-graph-core==1.8.1",
+        "python-graph-dot==1.8.1",
+        "django-form-admin==0.3.2"
+    ],
     keywords="django,imports,cycle,cyclic imports,analyze code",
     url='https://github.com/goinnn/django-detect-cyclic',
     packages=find_packages(where='src'),

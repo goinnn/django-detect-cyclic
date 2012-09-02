@@ -1,6 +1,22 @@
 Releases
 ========
 
+0.0.9  (2012-09-02)
+-------------------
+
+* Fix some errors
+* Adapt the code to the last version of pyplete. Now the detect the relative imports, something like this:
+
+::
+
+   from models import MyModel # from the same directory of the models.py
+
+And this:
+
+::
+
+   from .models import MyModel # from the same directory of the models.py
+
 0.0.8 (2012-08-09)
 ------------------
 
