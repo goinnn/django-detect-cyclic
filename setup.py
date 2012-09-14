@@ -35,6 +35,7 @@ setup(
     ],
     license="LGPL 3",
     install_requires=[
+        "pydot==1.0.28",
         "pysmell==0.7.3",
         "pyplete==0.0.2",
         "python-graph-core==1.8.1",
